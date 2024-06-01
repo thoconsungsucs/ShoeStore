@@ -5,15 +5,15 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using ShoeStore.Data;
+using ShoeStore.DataAccess.Data;
 
 #nullable disable
 
-namespace ShoeStore.Migrations
+namespace ShoeStore.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240601091259_SeedCategoryAndShoe")]
-    partial class SeedCategoryAndShoe
+    [Migration("20240601135435_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

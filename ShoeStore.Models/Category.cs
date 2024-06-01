@@ -13,5 +13,6 @@ namespace ShoeStore.Models
         public bool Active { get; set; }
         public DateOnly DateUpdated { get; set; }
         public ICollection<Shoe> Shoes { get; set; }
+
     }
 }

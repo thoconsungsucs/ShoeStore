@@ -1,16 +1,16 @@
-﻿@model List<Category>
+﻿@model List<Shoe>
 
-<partial name="_Notifications" />
+        <partial name="_Notifications" />
 <div class="container">
     <div class="row py-4">
         <div class="col-6">
-            <h2 class="text-primary">Category List</h2>
+            <h2 class="text-primary">Shoe List</h2>
         </div>
 
         <div class="col-6 text-end">
-            <a asp-controller="Category" asp-action="Upsert" class="btn btn-primary">
+            <a asp-controller="Shoe" asp-action="Upsert" class="btn btn-primary">
                 <i class="bi bi-plus-lg"></i>
-                Create New Category
+                Create New Shoe
             </a>
         </div>
 
@@ -19,40 +19,40 @@
         <thead>
             <tr>
                 <th>
+                    Shoe Name
+                </th>
+                <th>
+                    Description
+                </th>
+                <th>
+                    Price
+                </th>
+                <th>
                     Category Name
-                </th>
-                <th>
-                    Display Order
-                </th>
-                <th>
-                    Active
-                </th>
-                <th>
-                    Date Updated
                 </th>
             </tr>
         </thead>
 
         <tbody>
-            @foreach (var item in Model.OrderBy(c => c.DisplayOrder))
+            @foreach (var item in Model)
             {
                 <tr>
-                    <td>@item.CategoryName</td>
-                    <th>@item.DisplayOrder</th>
-                    <th>@item.Active</th>
-                    <th>@item.DateUpdated</th>
-                    <td class="text-end w-25 p-0 align-content-center">
+                    <th>@item.ShoeName</th>
+                    <th>@item.Description</th>
+                    <th>@item.Price</th>
+                    <th>@item.Category.CategoryName</th>
+                    <th class="text-end w-10 p-0 align-content-center">
                         <div class="btn-group" style="min-width: 150px;">
-                            <a asp-controller="Category" asp-action="Upsert" asp-route-id="@item.CategoryId" class="btn btn-primary">
+                            <a asp-controller="Shoe" asp-action="Upsert" asp-route-id="@item.ShoeId" class="btn btn-primary">
                                 <i class="bi bi-pencil"></i>
                                 Edit
                             </a>
-                            <a asp-controller="Category" asp-action="Delete" asp-route-id="@item.CategoryId" class="btn btn-danger">
+                            <a asp-controller="Shoe" asp-action="Delete" asp-route-id="@item.ShoeId" class="btn btn-danger">
                                 <i class="bi bi-trash"></i>
                                 Delete
                             </a>
                         </div>
-                    </td>
+                    </th>
                 </tr>
             }
         </tbody>

@@ -1,0 +1,56 @@
+﻿    @model ShoeVM
+
+<div class="card mt-5 shadow border-0 rounded-3">
+
+    <div class="card-header border-0 p-0 rounded-top-3 bg-primary p-4">
+        <div class="text-center align-content-center">
+            <h2 class="text-primary m-0 text-white"Delete Shoe </h2>
+            @* <div asp-validation-summary="ModelOnly" class="text-danger"></div> *@
+        </div>
+    </div>
+    <div class="card-body">
+        <form method="post">
+            <input asp-for="Shoe.ShoeId" type="hidden" />
+            <div class="mb-3">
+                <label asp-for="Shoe.ShoeName" class="form-label"></label>
+                <input asp-for="Shoe.ShoeName" class="form-control p-2" placeholder="Enter Shoe Name" disabled>
+                <span asp-validation-for="Shoe.ShoeName" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Shoe.Description" class="form-label"></label>
+                <input asp-for="Shoe.Description" class="form-control p-2" placeholder="Enter Discription" disabled>
+                <span asp-validation-for="Shoe.Description" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Shoe.Price" class="form-label"></label>
+                <input asp-for="Shoe.Price" class="form-control p-2" placeholder="Enter Price" disabled>
+                <span asp-validation-for="Shoe.Price" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Shoe.CategoryId" class="form-label"></label>
+                <select asp-for="Shoe.CategoryId" asp-items="@Model.CategoryList" class="form-select" disabled>
+                    <option disabled selected>-- Select Category --</option>
+                </select>
+            </div>
+
+
+            <div class="row mt-4">
+                <div class="col-6 col-md-4">
+                    <button type="submit" class="btn btn-primary form-control">
+                        Delete
+                    </button>
+
+                </div>
+                <div class="col-6 col-md-4">
+                    <a asp-controller="Shoe" asp-action="Index" class="btn btn-outline-secondary form-control">Back To List</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

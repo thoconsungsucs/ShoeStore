@@ -1,5 +1,10 @@
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
-using ShoeStore.Data;
+using ShoeStore.DataAccess.Data;
+using ShoeStore.DataAccess.Repository;
+using ShoeStore.DataAccess.Repository.IRepository;
+using ShoeStore.Ultility;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,7 +13,8 @@ builder.Services.AddControllersWithViews();
 // Add DbContext to the container
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IEmailSender, EmailSender>();
 
 
 var app = builder.Build();

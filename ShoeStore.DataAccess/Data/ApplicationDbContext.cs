@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ShoeStore.Models;
 
-namespace ShoeStore.Data
+namespace ShoeStore.DataAccess.Data
 {
     public class ApplicationDbContext : DbContext
     {
