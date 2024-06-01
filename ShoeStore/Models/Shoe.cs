@@ -9,7 +9,7 @@ namespace ShoeStore.Models
         [Key]
         public int ShoeId { get; set; }
         [Required]
-        [StringLength(20)]
+        [StringLength(50)]
         [Display(Name = "Shoe Name")]
         public string ShoeName { get; set; }
         public string Description { get; set; }
