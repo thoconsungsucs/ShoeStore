@@ -1,0 +1,57 @@
+﻿@model List<Color>
+
+<partial name="_Notifications" />
+<div class="container">
+    <div class="row py-4">
+        <div class="col-6">
+            <h2 class="text-primary">Color List</h2>
+        </div>
+
+        <div class="col-6 text-end">
+            <a asp-controller="Color" asp-action="Upsert" class="btn btn-primary">
+                <i class="bi bi-plus-lg"></i>
+                Create New Color
+            </a>
+        </div>
+
+    </div>
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>
+                    Color Name
+                </th>
+                <th>
+                    Active
+                </th>
+                <th>
+                    Date Updated
+                </th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.ColorName</td>
+                    <th>@item.Active</th>
+                    <th>@item.DateUpdated</th>
+                    <td class="text-end w-25 p-0 align-content-center">
+                        <div class="btn-group" style="min-width: 150px;">
+                            <a asp-controller="Color" asp-action="Upsert" asp-route-id="@item.ColorId" class="btn btn-primary">
+                                <i class="bi bi-pencil"></i>
+                                Edit
+                            </a>
+                            <a asp-controller="Color" asp-action="Delete" asp-route-id="@item.ColorId" class="btn btn-danger">
+                                <i class="bi bi-trash"></i>
+                                Delete
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+</div>

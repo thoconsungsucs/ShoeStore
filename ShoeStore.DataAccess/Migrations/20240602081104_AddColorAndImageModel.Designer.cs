@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ShoeStore.DataAccess.Data;
 
@@ -11,9 +12,11 @@ using ShoeStore.DataAccess.Data;
 namespace ShoeStore.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240602081104_AddColorAndImageModel")]
+    partial class AddColorAndImageModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -106,9 +109,6 @@ namespace ShoeStore.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ColorId"));
 
-                    b.Property<bool>("Active")
-                        .HasColumnType("bit");
-
                     b.Property<string>("ColorName")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -120,74 +120,6 @@ namespace ShoeStore.DataAccess.Migrations
                     b.HasKey("ColorId");
 
                     b.ToTable("Colors");
-                });
-
-            modelBuilder.Entity("ShoeStore.Models.Discount", b =>
-                {
-                    b.Property<int>("DiscountId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DiscountId"));
-
-                    b.Property<bool>("Active")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("DiscountName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<double>("DiscountValue")
-                        .HasColumnType("float");
-
-                    b.Property<DateOnly>("EndDate")
-                        .HasColumnType("date");
-
-                    b.Property<DateOnly>("StartDate")
-                        .HasColumnType("date");
-
-                    b.HasKey("DiscountId");
-
-                    b.ToTable("Discounts");
-                });
-
-            modelBuilder.Entity("ShoeStore.Models.Gender", b =>
-                {
-                    b.Property<int>("GenderId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("GenderId"));
-
-                    b.Property<string>("GenderName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("GenderId");
-
-                    b.ToTable("Genders");
-
-                    b.HasData(
-                        new
-                        {
-                            GenderId = 1,
-                            GenderName = "Men"
-                        },
-                        new
-                        {
-                            GenderId = 2,
-                            GenderName = "Women"
-                        },
-                        new
-                        {
-                            GenderId = 3,
-                            GenderName = "Kids"
-                        },
-                        new
-                        {
-                            GenderId = 4,
-                            GenderName = "Unisex"
-                        });
                 });
 
             modelBuilder.Entity("ShoeStore.Models.ImageShoe", b =>
@@ -294,84 +226,6 @@ namespace ShoeStore.DataAccess.Migrations
                             Description = "Whatever your why is for working out, the Metcon 9 makes it all worth it. We improved on the 8 with a larger Hyperlift plate and added rubber rope wrap. Sworn by some of the greatest athletes in the world, intended for lifters, cross-trainers and go-getters, and still the gold standard that delivers day after day.",
                             Price = 160m,
                             ShoeName = "Nike Metcon 9 AMP"
-                        });
-                });
-
-            modelBuilder.Entity("ShoeStore.Models.Size", b =>
-                {
-                    b.Property<int>("SizeId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SizeId"));
-
-                    b.Property<int>("SizeValue")
-                        .HasColumnType("int");
-
-                    b.HasKey("SizeId");
-
-                    b.ToTable("Sizes");
-
-                    b.HasData(
-                        new
-                        {
-                            SizeId = 1,
-                            SizeValue = 36
-                        },
-                        new
-                        {
-                            SizeId = 2,
-                            SizeValue = 37
-                        },
-                        new
-                        {
-                            SizeId = 3,
-                            SizeValue = 38
-                        },
-                        new
-                        {
-                            SizeId = 4,
-                            SizeValue = 39
-                        },
-                        new
-                        {
-                            SizeId = 5,
-                            SizeValue = 40
-                        },
-                        new
-                        {
-                            SizeId = 6,
-                            SizeValue = 41
-                        },
-                        new
-                        {
-                            SizeId = 7,
-                            SizeValue = 42
-                        },
-                        new
-                        {
-                            SizeId = 8,
-                            SizeValue = 43
-                        },
-                        new
-                        {
-                            SizeId = 9,
-                            SizeValue = 44
-                        },
-                        new
-                        {
-                            SizeId = 10,
-                            SizeValue = 45
-                        },
-                        new
-                        {
-                            SizeId = 11,
-                            SizeValue = 46
-                        },
-                        new
-                        {
-                            SizeId = 12,
-                            SizeValue = 47
                         });
                 });
 

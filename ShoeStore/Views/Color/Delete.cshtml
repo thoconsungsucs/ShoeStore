@@ -1,0 +1,43 @@
+﻿@model Color
+
+<div class="card mt-5 shadow border-0 rounded-3">
+
+    <div class="card-header border-0 p-0 rounded-top-3 bg-primary p-4">
+        <div class="text-center align-content-center">
+            <h2 class="text-primary m-0 text-white">Delete Color </h2>
+            @* <div asp-validation-summary="ModelOnly" class="text-danger"></div> *@
+        </div>
+    </div>
+    <div class="card-body">
+        <form method="post">
+            <input asp-for="ColorId" type="hidden" />
+            <div class="mb-3">
+                <label asp-for="ColorName" class="form-label"></label>
+                <input asp-for="ColorName" class="form-control p-2" placeholder="Enter Color Name" disabled>
+                <span asp-validation-for="ColorName" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Active" class="form-label"></label>
+                <input asp-for="Active" type="checkbox" disabled>
+                <span asp-validation-for="Active" class="text-danger"></span>
+            </div>
+
+
+            <div class="row mt-4">
+                <div class="col-6 col-md-4">
+                    <button type="submit" class="btn btn-primary form-control">
+                        Delete
+                    </button>
+
+                </div>
+                <div class="col-6 col-md-4">
+                    <a asp-controller="Color" asp-action="Index" class="btn btn-outline-secondary form-control">Back To List</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -2,18 +2,16 @@
 
 namespace ShoeStore.Models
 {
-    public class Category
+    public class Color
     {
         [Key]
-        public int CategoryId { get; set; }
+        public int ColorId { get; set; }
         [Required]
-        [Display(Name = "Category Name")]
-        public string CategoryName { get; set; }
-        public int DisplayOrder { get; set; }
+        [Display(Name = "Color Name")]
+        [StringLength(50)]
+        public string ColorName { get; set; }
         public bool Active { get; set; }
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         public DateOnly DateUpdated { get; set; }
-        public ICollection<Shoe> Shoes { get; set; }
-
     }
 }

@@ -4,6 +4,11 @@
     {
         IShoeRepository Shoe { get; }
         ICategoryRepository Category { get; }
+        IColorRepository Color { get; }
+        IImageShoeRepository ImageShoe { get; }
+        IGenderRepository Gender { get; }
+        ISizeRepository Size { get; }
+        IDiscountRepository Discount { get; }
         void Save();
     }
 }

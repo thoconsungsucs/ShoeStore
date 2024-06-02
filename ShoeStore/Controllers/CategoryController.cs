@@ -42,6 +42,7 @@ namespace ShoeStore.Controllers
             if (category.CategoryId == null || category.CategoryId == 0)
             {
                 _unitOfWork.Category.Add(category);
+                category.DateUpdated = DateOnly.FromDateTime(DateTime.UtcNow);
                 TempData["Success"] = "Category added successfully";
             }
             else

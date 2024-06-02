@@ -1,0 +1,61 @@
+﻿    @model Discount
+
+<div class="card mt-5 shadow border-0 rounded-3">
+
+    <div class="card-header border-0 p-0 rounded-top-3 bg-primary p-4">
+        <div class="text-center align-content-center">
+            <h2 class="text-primary m-0 text-white">@(Model == null ? "Create" : "Edit") Discount </h2>
+            @* <div asp-validation-summary="ModelOnly" class="text-danger"></div> *@
+        </div>
+    </div>
+    <div class="card-body">
+        <form method="post">
+            <input asp-for="DiscountId" type="hidden" />
+            <div class="mb-3">
+                <label asp-for="DiscountName" class="form-label"></label>
+                <input asp-for="DiscountName" class="form-control p-2" placeholder="Enter Discount Name">
+                <span asp-validation-for="DiscountName" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="DiscountValue" class="form-label"></label>
+                <input asp-for="DiscountValue" class="form-control p-2" placeholder="Enter Discount Value">
+                <span asp-validation-for="DiscountValue" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="StartDate" class="form-label"></label>
+                <input asp-for="StartDate" class="form-control p-2" type="date">
+                <span asp-validation-for="StartDate" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="EndDate" class="form-label"></label>
+                <input asp-for="EndDate" class="form-control p-2" type="date">
+                <span asp-validation-for="EndDate" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Active" class="form-label"></label>
+                <input asp-for="Active" type="checkbox">
+                <span asp-validation-for="Active" class="text-danger"></span>
+            </div>
+
+
+            <div class="row mt-4">
+                <div class="col-6 col-md-4">
+                    <button type="submit" class="btn btn-primary form-control">
+                        @(Model == null ? "Create" : "Edit")
+                    </button>
+
+                </div>
+                <div class="col-6 col-md-4">
+                    <a asp-controller="Discount" asp-action="Index" class="btn btn-outline-secondary form-control">Back To List</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
