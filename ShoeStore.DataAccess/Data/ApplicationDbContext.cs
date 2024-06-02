@@ -16,7 +16,7 @@ namespace ShoeStore.DataAccess.Data
         DbSet<Size> Sizes { get; set; }
         DbSet<Gender> Genders { get; set; }
         DbSet<Discount> Discounts { get; set; }
-
+        DbSet<SpecificShoe> SpecificShoes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
