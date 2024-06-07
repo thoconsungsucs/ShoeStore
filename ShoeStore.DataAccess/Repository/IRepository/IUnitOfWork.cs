@@ -9,6 +9,7 @@
         IGenderRepository Gender { get; }
         ISizeRepository Size { get; }
         IDiscountRepository Discount { get; }
+        ISpecificShoeRepository SpecificShoe { get; }
         void Save();
     }
 }

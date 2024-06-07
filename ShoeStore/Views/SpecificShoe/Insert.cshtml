@@ -1,0 +1,125 @@
+﻿@model SpecificShoeVM
+
+<div class="card mt-5 shadow border-0 rounded-3">
+    <div class="card-header border-0 p-0 rounded-top-3 bg-primary p-4">
+        <div class="text-center align-content-center">
+            <h2 class="text-primary m-0 text-white">Manage Specific Shoe </h2>
+            @* <div asp-validation-summary="ModelOnly" class="text-danger"></div> *@
+        </div>
+    </div>
+    <div class="card-body">
+        <form method="post" enctype="multipart/form-data">
+            <input asp-for="Shoe.ShoeId" type="hidden" />
+            <input asp-for="Shoe.ShoeName" type="hidden" />
+            <div class="mb-3">
+                <label asp-for="Shoe.ShoeName" class="form-label"></label>
+                <input asp-for="Shoe.ShoeName" class="form-control p-2" placeholder="Enter Shoe Name" disabled>
+                <span asp-validation-for="Shoe.ShoeName" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Shoe.Description" class="form-label"></label>
+                <input asp-for="Shoe.Description" class="form-control p-2" placeholder="Enter Discription" disabled>
+                <span asp-validation-for="Shoe.Description" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Shoe.Price" class="form-label"></label>
+                <input asp-for="Shoe.Price" class="form-control p-2" placeholder="Enter Price" disabled>
+                <span asp-validation-for="Shoe.Price" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="SpecificShoe.Price" class="form-label"></label>
+                <input asp-for="SpecificShoe.Price" class="form-control p-2" placeholder="Enter Specific Price" value="@Model.Shoe.Price">
+                <span asp-validation-for="SpecificShoe.Price" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="SpecificShoe.Quantity" class="form-label"></label>
+                <input asp-for="SpecificShoe.Quantity" class="form-control p-2" placeholder="Enter Specific Price">
+                <span asp-validation-for="SpecificShoe.Quantity" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="SpecificShoe.GenderId" class="form-label"></label>
+                <select asp-for="SpecificShoe.GenderId" asp-items="@Model.GenderList" class="form-select">
+                    <option disabled selected>-- Select Gender --</option>
+                </select>
+                <span asp-validation-for="SpecificShoe.GenderId" class="text-danger"></span>
+
+            </div>
+
+            <div class="mb-2">
+                <label>Sizes</label>
+            </div>
+            <div class="btn-group btn-group-toggle mb-3" data-toggle="buttons">
+                @foreach (var size in Model.SizeList)
+                {
+                    <label class="btn btn-outline-primary d-block" style="margin-right: 5px;">
+                        <input type="checkbox" name="SizeSelected" value="@size.Value" style="display: none;"> @size.Text
+                    </label>
+                }
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="SpecificShoe.ColorId" class="form-label"></label>
+                <select asp-for="SpecificShoe.ColorId" asp-items="@Model.ColorList" class="form-select">
+                    <option disabled selected>-- Select Color --</option>
+                </select>
+                <span asp-validation-for="SpecificShoe.ColorId" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="SpecificShoe.DiscountId" class="form-label"></label>
+                <select asp-for="SpecificShoe.DiscountId" asp-items="@Model.DiscountList" class="form-select">
+                    <option disabled selected>-- Select Discount --</option>
+                </select>
+                <span asp-validation-for="SpecificShoe.DiscountId" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="SpecificShoe.ImageShoes" class="ms-2"></label>
+                <input type="file" name="files" class="form-control border-0 shadow" multiple />
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-6 col-md-4">
+                    <button type="submit" class="btn btn-primary form-control">
+                        Save
+                    </button>
+
+                </div>
+                <div class="col-6 col-md-4">
+                    <a asp-controller="Shoe" asp-action="Index" class="btn btn-outline-secondary form-control">Back To List</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        $(document).ready(function() {
+
+            $('.btn-group-toggle .btn').on('click', function() {
+                var $input = $(this).find('input');
+                if ($input.is(':checked')) {
+                    $(this).css({
+                        'background-color': '',
+                        'color': '',
+                        'border-color': ''
+                    });
+                    $input.prop('checked', false);
+                } else {
+                    $(this).css({
+                        'background-color': '#007bff',
+                        'color': 'white',
+                        'border-color': '#007bff'
+                    });
+                    $input.prop('checked', true);
+                }
+            });
+        });
+    </script>
+}

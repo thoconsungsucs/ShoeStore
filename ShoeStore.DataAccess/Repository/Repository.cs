@@ -50,7 +50,7 @@ namespace ShoeStore.DataAccess.Repository
             return query.FirstOrDefault();
         }
 
-        public IEnumerable<T> GetAll(Expression<Func<T, bool>>? filter = null, string? includeProperties = null)
+        public IQueryable<T> GetAll(Expression<Func<T, bool>>? filter = null, string? includeProperties = null)
         {
             IQueryable<T> query = dbSet;
             if (filter != null)
@@ -64,7 +64,7 @@ namespace ShoeStore.DataAccess.Repository
                     query = query.Include(includeProperty);
                 }
             }
-            return query.ToList();
+            return query;
         }
 
         public void Remove(T entity)

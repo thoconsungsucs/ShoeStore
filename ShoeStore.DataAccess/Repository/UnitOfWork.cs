@@ -13,7 +13,7 @@ namespace ShoeStore.DataAccess.Repository
         public IGenderRepository Gender { get; private set; }
         public ISizeRepository Size { get; private set; }
         public IDiscountRepository Discount { get; private set; }
-
+        public ISpecificShoeRepository SpecificShoe { get; private set; }
         public UnitOfWork(ApplicationDbContext db)
         {
             _db = db;
@@ -24,6 +24,7 @@ namespace ShoeStore.DataAccess.Repository
             Gender = new GenderRepository(_db);
             Size = new SizeRepository(_db);
             Discount = new DiscountRepository(_db);
+            SpecificShoe = new SpecificShoeRepository(_db);
         }
 
         public void Save()

@@ -91,5 +91,21 @@ namespace ShoeStore.Controllers
             TempData["Success"] = "Shoe deleted successfully";
             return RedirectToAction(nameof(Index));
         }
+
+        #region API CALLS
+        [HttpGet]
+        public IActionResult GetAll()
+        {
+            var shoeList = _unitOfWork.Shoe.GetAll(includeProperties: "Category")
+                                           .Select(s => new
+                                           {
+                                               Id = s.ShoeId,
+                                               ShoeName = s.ShoeName,
+                                               Price = s.Price,
+                                               CategoryName = s.Category.CategoryName
+                                           }).ToList();
+            return Json(new { data = shoeList });
+        }
+        #endregion
     }
 }

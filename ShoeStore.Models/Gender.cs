@@ -6,7 +6,6 @@ namespace ShoeStore.Models
     {
         [Key]
         public int GenderId { get; set; }
-        [Display(Name = "Gender")]
         public string GenderName { get; set; }
     }
 }
