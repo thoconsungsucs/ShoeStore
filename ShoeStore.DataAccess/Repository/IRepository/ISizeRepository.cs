@@ -1,4 +1,4 @@
-﻿using ShoeStore.Models;
+﻿/*using ShoeStore.Models;
 
 namespace ShoeStore.DataAccess.Repository.IRepository
 {
@@ -6,3 +6,4 @@ namespace ShoeStore.DataAccess.Repository.IRepository
     {
     }
 }
+*/

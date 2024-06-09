@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿/*using System.ComponentModel.DataAnnotations;
 
 namespace ShoeStore.Models
 {
@@ -10,3 +10,4 @@ namespace ShoeStore.Models
         public int SizeValue { get; set; }
     }
 }
+*/

@@ -151,45 +151,6 @@ namespace ShoeStore.DataAccess.Migrations
                     b.ToTable("Discounts");
                 });
 
-            modelBuilder.Entity("ShoeStore.Models.Gender", b =>
-                {
-                    b.Property<int>("GenderId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("GenderId"));
-
-                    b.Property<string>("GenderName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("GenderId");
-
-                    b.ToTable("Genders");
-
-                    b.HasData(
-                        new
-                        {
-                            GenderId = 1,
-                            GenderName = "Men"
-                        },
-                        new
-                        {
-                            GenderId = 2,
-                            GenderName = "Women"
-                        },
-                        new
-                        {
-                            GenderId = 3,
-                            GenderName = "Kids"
-                        },
-                        new
-                        {
-                            GenderId = 4,
-                            GenderName = "Unisex"
-                        });
-                });
-
             modelBuilder.Entity("ShoeStore.Models.ImageShoe", b =>
                 {
                     b.Property<int>("ImageShoeId")
@@ -297,84 +258,6 @@ namespace ShoeStore.DataAccess.Migrations
                         });
                 });
 
-            modelBuilder.Entity("ShoeStore.Models.Size", b =>
-                {
-                    b.Property<int>("SizeId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SizeId"));
-
-                    b.Property<int>("SizeValue")
-                        .HasColumnType("int");
-
-                    b.HasKey("SizeId");
-
-                    b.ToTable("Sizes");
-
-                    b.HasData(
-                        new
-                        {
-                            SizeId = 1,
-                            SizeValue = 36
-                        },
-                        new
-                        {
-                            SizeId = 2,
-                            SizeValue = 37
-                        },
-                        new
-                        {
-                            SizeId = 3,
-                            SizeValue = 38
-                        },
-                        new
-                        {
-                            SizeId = 4,
-                            SizeValue = 39
-                        },
-                        new
-                        {
-                            SizeId = 5,
-                            SizeValue = 40
-                        },
-                        new
-                        {
-                            SizeId = 6,
-                            SizeValue = 41
-                        },
-                        new
-                        {
-                            SizeId = 7,
-                            SizeValue = 42
-                        },
-                        new
-                        {
-                            SizeId = 8,
-                            SizeValue = 43
-                        },
-                        new
-                        {
-                            SizeId = 9,
-                            SizeValue = 44
-                        },
-                        new
-                        {
-                            SizeId = 10,
-                            SizeValue = 45
-                        },
-                        new
-                        {
-                            SizeId = 11,
-                            SizeValue = 46
-                        },
-                        new
-                        {
-                            SizeId = 12,
-                            SizeValue = 47
-                        });
-                });
-
             modelBuilder.Entity("ShoeStore.Models.SpecificShoe", b =>
                 {
                     b.Property<int>("SpecificShoeId")
@@ -392,9 +275,6 @@ namespace ShoeStore.DataAccess.Migrations
                     b.Property<int>("Gender")
                         .HasColumnType("int");
 
-                    b.Property<int>("GenderId")
-                        .HasColumnType("int");
-
                     b.Property<double>("Price")
                         .HasColumnType("float");
 
@@ -404,7 +284,7 @@ namespace ShoeStore.DataAccess.Migrations
                     b.Property<int>("ShoeId")
                         .HasColumnType("int");
 
-                    b.Property<int>("SizeId")
+                    b.Property<int>("Size")
                         .HasColumnType("int");
 
                     b.HasKey("SpecificShoeId");
@@ -414,8 +294,6 @@ namespace ShoeStore.DataAccess.Migrations
                     b.HasIndex("DiscountId");
 
                     b.HasIndex("ShoeId");
-
-                    b.HasIndex("SizeId");
 
                     b.ToTable("SpecificShoes");
                 });
@@ -470,19 +348,11 @@ namespace ShoeStore.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ShoeStore.Models.Size", "Size")
-                        .WithMany()
-                        .HasForeignKey("SizeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Color");
 
                     b.Navigation("Discount");
 
                     b.Navigation("Shoe");
-
-                    b.Navigation("Size");
                 });
 
             modelBuilder.Entity("ShoeStore.Models.Category", b =>

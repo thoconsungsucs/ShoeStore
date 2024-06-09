@@ -10,8 +10,8 @@ namespace ShoeStore.DataAccess.Repository
         public IShoeRepository Shoe { get; private set; }
         public IColorRepository Color { get; private set; }
         public IImageShoeRepository ImageShoe { get; private set; }
-        public IGenderRepository Gender { get; private set; }
-        public ISizeRepository Size { get; private set; }
+        /*        public IGenderRepository Gender { get; private set; }
+                public ISizeRepository Size { get; private set; }*/
         public IDiscountRepository Discount { get; private set; }
         public ISpecificShoeRepository SpecificShoe { get; private set; }
         public UnitOfWork(ApplicationDbContext db)
@@ -21,8 +21,8 @@ namespace ShoeStore.DataAccess.Repository
             Shoe = new ShoeRepository(_db);
             Color = new ColorRepository(_db);
             ImageShoe = new ImageShoeRepository(_db);
-            Gender = new GenderRepository(_db);
-            Size = new SizeRepository(_db);
+            /*            Gender = new GenderRepository(_db);
+                        Size = new SizeRepository(_db);*/
             Discount = new DiscountRepository(_db);
             SpecificShoe = new SpecificShoeRepository(_db);
         }

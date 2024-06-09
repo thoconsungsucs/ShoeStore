@@ -5,25 +5,24 @@
 namespace ShoeStore.DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class AddColorActive : Migration
+    public partial class ChangeName : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<bool>(
-                name: "Active",
-                table: "Colors",
-                type: "bit",
-                nullable: false,
-                defaultValue: false);
+            migrationBuilder.RenameColumn(
+                name: "gender",
+                table: "SpecificShoes",
+                newName: "Gender");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "Active",
-                table: "Colors");
+            migrationBuilder.RenameColumn(
+                name: "Gender",
+                table: "SpecificShoes",
+                newName: "gender");
         }
     }
 }

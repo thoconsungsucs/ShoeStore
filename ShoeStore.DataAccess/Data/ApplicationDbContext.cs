@@ -13,8 +13,8 @@ namespace ShoeStore.DataAccess.Data
         DbSet<Shoe> Shoes { get; set; }
         DbSet<Color> Colors { get; set; }
         DbSet<ImageShoe> ImageShoes { get; set; }
-        DbSet<Size> Sizes { get; set; }
-        DbSet<Gender> Genders { get; set; }
+        /*        DbSet<Size> Sizes { get; set; }
+                DbSet<Gender> Genders { get; set; }*/
         DbSet<Discount> Discounts { get; set; }
         DbSet<SpecificShoe> SpecificShoes { get; set; }
 
@@ -79,26 +79,26 @@ namespace ShoeStore.DataAccess.Data
                     Price = 160,
                 }
                 );
-            modelBuilder.Entity<Size>().HasData(
-                new Size { SizeId = 1, SizeValue = 36 },
-                new Size { SizeId = 2, SizeValue = 37 },
-                new Size { SizeId = 3, SizeValue = 38 },
-                new Size { SizeId = 4, SizeValue = 39 },
-                new Size { SizeId = 5, SizeValue = 40 },
-                new Size { SizeId = 6, SizeValue = 41 },
-                new Size { SizeId = 7, SizeValue = 42 },
-                new Size { SizeId = 8, SizeValue = 43 },
-                new Size { SizeId = 9, SizeValue = 44 },
-                new Size { SizeId = 10, SizeValue = 45 },
-                new Size { SizeId = 11, SizeValue = 46 },
-                new Size { SizeId = 12, SizeValue = 47 }
-                );
-            modelBuilder.Entity<Gender>().HasData(
-                new Gender { GenderId = 1, GenderName = "Men" },
-                new Gender { GenderId = 2, GenderName = "Women" },
-                new Gender { GenderId = 3, GenderName = "Kids" },
-                new Gender { GenderId = 4, GenderName = "Unisex" }
-                );
+            /*    modelBuilder.Entity<Size>().HasData(
+                    new Size { SizeId = 1, SizeValue = 36 },
+                    new Size { SizeId = 2, SizeValue = 37 },
+                    new Size { SizeId = 3, SizeValue = 38 },
+                    new Size { SizeId = 4, SizeValue = 39 },
+                    new Size { SizeId = 5, SizeValue = 40 },
+                    new Size { SizeId = 6, SizeValue = 41 },
+                    new Size { SizeId = 7, SizeValue = 42 },
+                    new Size { SizeId = 8, SizeValue = 43 },
+                    new Size { SizeId = 9, SizeValue = 44 },
+                    new Size { SizeId = 10, SizeValue = 45 },
+                    new Size { SizeId = 11, SizeValue = 46 },
+                    new Size { SizeId = 12, SizeValue = 47 }
+                    );
+                modelBuilder.Entity<Gender>().HasData(
+                    new Gender { GenderId = 1, GenderName = "Men" },
+                    new Gender { GenderId = 2, GenderName = "Women" },
+                    new Gender { GenderId = 3, GenderName = "Kids" },
+                    new Gender { GenderId = 4, GenderName = "Unisex" }
+                    );*/
         }
     }
 }

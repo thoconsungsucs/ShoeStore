@@ -1,4 +1,4 @@
-﻿using ShoeStore.DataAccess.Data;
+﻿/*using ShoeStore.DataAccess.Data;
 using ShoeStore.DataAccess.Repository.IRepository;
 using ShoeStore.Models;
 
@@ -15,3 +15,4 @@ namespace ShoeStore.DataAccess.Repository
 
     }
 }
+*/

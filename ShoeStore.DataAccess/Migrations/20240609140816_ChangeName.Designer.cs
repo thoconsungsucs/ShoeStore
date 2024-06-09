@@ -12,8 +12,8 @@ using ShoeStore.DataAccess.Data;
 namespace ShoeStore.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240601135435_Init")]
-    partial class Init
+    [Migration("20240609140816_ChangeName")]
+    partial class ChangeName
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -101,6 +101,86 @@ namespace ShoeStore.DataAccess.Migrations
                         });
                 });
 
+            modelBuilder.Entity("ShoeStore.Models.Color", b =>
+                {
+                    b.Property<int>("ColorId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ColorId"));
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ColorName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateOnly>("DateUpdated")
+                        .HasColumnType("date");
+
+                    b.HasKey("ColorId");
+
+                    b.ToTable("Colors");
+                });
+
+            modelBuilder.Entity("ShoeStore.Models.Discount", b =>
+                {
+                    b.Property<int>("DiscountId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DiscountId"));
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("DiscountName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("DiscountValue")
+                        .HasColumnType("float");
+
+                    b.Property<DateOnly>("EndDate")
+                        .HasColumnType("date");
+
+                    b.Property<DateOnly>("StartDate")
+                        .HasColumnType("date");
+
+                    b.HasKey("DiscountId");
+
+                    b.ToTable("Discounts");
+                });
+
+            modelBuilder.Entity("ShoeStore.Models.ImageShoe", b =>
+                {
+                    b.Property<int>("ImageShoeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ImageShoeId"));
+
+                    b.Property<int>("ColorId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ShoeId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ImageShoeId");
+
+                    b.HasIndex("ColorId");
+
+                    b.HasIndex("ShoeId");
+
+                    b.ToTable("ImageShoes");
+                });
+
             modelBuilder.Entity("ShoeStore.Models.Shoe", b =>
                 {
                     b.Property<int>("ShoeId")
@@ -181,6 +261,65 @@ namespace ShoeStore.DataAccess.Migrations
                         });
                 });
 
+            modelBuilder.Entity("ShoeStore.Models.SpecificShoe", b =>
+                {
+                    b.Property<int>("SpecificShoeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SpecificShoeId"));
+
+                    b.Property<int>("ColorId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DiscountId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Gender")
+                        .HasColumnType("int");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ShoeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Size")
+                        .HasColumnType("int");
+
+                    b.HasKey("SpecificShoeId");
+
+                    b.HasIndex("ColorId");
+
+                    b.HasIndex("DiscountId");
+
+                    b.HasIndex("ShoeId");
+
+                    b.ToTable("SpecificShoes");
+                });
+
+            modelBuilder.Entity("ShoeStore.Models.ImageShoe", b =>
+                {
+                    b.HasOne("ShoeStore.Models.Color", "Color")
+                        .WithMany()
+                        .HasForeignKey("ColorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ShoeStore.Models.Shoe", "Shoe")
+                        .WithMany()
+                        .HasForeignKey("ShoeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Color");
+
+                    b.Navigation("Shoe");
+                });
+
             modelBuilder.Entity("ShoeStore.Models.Shoe", b =>
                 {
                     b.HasOne("ShoeStore.Models.Category", "Category")
@@ -190,6 +329,33 @@ namespace ShoeStore.DataAccess.Migrations
                         .IsRequired();
 
                     b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("ShoeStore.Models.SpecificShoe", b =>
+                {
+                    b.HasOne("ShoeStore.Models.Color", "Color")
+                        .WithMany()
+                        .HasForeignKey("ColorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ShoeStore.Models.Discount", "Discount")
+                        .WithMany()
+                        .HasForeignKey("DiscountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ShoeStore.Models.Shoe", "Shoe")
+                        .WithMany()
+                        .HasForeignKey("ShoeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Color");
+
+                    b.Navigation("Discount");
+
+                    b.Navigation("Shoe");
                 });
 
             modelBuilder.Entity("ShoeStore.Models.Category", b =>

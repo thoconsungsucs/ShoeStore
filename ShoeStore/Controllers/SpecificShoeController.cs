@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using ShoeStore.DataAccess.Repository.IRepository;
 using ShoeStore.Models;
 using ShoeStore.Models.ViewModel;
+using ShoeStore.Ultility;
 
 namespace ShoeStore.Controllers
 {
@@ -27,16 +28,8 @@ namespace ShoeStore.Controllers
             {
                 SpecificShoe = new SpecificShoe(),
                 Shoe = _unitOfWork.Shoe.Get(s => s.ShoeId == id),
-                GenderList = _unitOfWork.Gender.GetAll().ToList().Select(i => new SelectListItem
-                {
-                    Text = i.GenderName,
-                    Value = i.GenderId.ToString()
-                }),
-                SizeList = _unitOfWork.Size.GetAll().ToList().Select(i => new SelectListItem
-                {
-                    Text = i.SizeValue.ToString(),
-                    Value = i.SizeId.ToString()
-                }),
+                GenderList = SD.GenderList,
+                SizeList = SD.SizeList,
                 ColorList = _unitOfWork.Color.GetAll().ToList().Select(i => new SelectListItem
                 {
                     Text = i.ColorName,
@@ -93,9 +86,9 @@ namespace ShoeStore.Controllers
                 SpecificShoe curShoe = new SpecificShoe
                 {
                     ShoeId = specificShoeVM.Shoe.ShoeId,
-                    GenderId = specificShoeVM.SpecificShoe.GenderId,
+                    Gender = specificShoeVM.SpecificShoe.Gender,
                     ColorId = specificShoeVM.SpecificShoe.ColorId,
-                    SizeId = size,
+                    Size = size,
                     DiscountId = specificShoeVM.SpecificShoe.DiscountId,
                     Price = specificShoeVM.SpecificShoe.Price,
                     Quantity = specificShoeVM.SpecificShoe.Quantity

@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿/*using System.ComponentModel.DataAnnotations;
 
 namespace ShoeStore.Models
 {
@@ -7,5 +7,17 @@ namespace ShoeStore.Models
         [Key]
         public int GenderId { get; set; }
         public string GenderName { get; set; }
+    }
+}
+*/
+
+namespace ShoeStore.Models
+{
+    public enum Gender
+    {
+        Men,
+        Women,
+        Kids,
+        Unisex
     }
 }

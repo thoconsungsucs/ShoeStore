@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ShoeStore.DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class Init : Migration
+    public partial class Remove : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -30,6 +30,38 @@ namespace ShoeStore.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Colors",
+                columns: table => new
+                {
+                    ColorId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ColorName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Active = table.Column<bool>(type: "bit", nullable: false),
+                    DateUpdated = table.Column<DateOnly>(type: "date", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Colors", x => x.ColorId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Discounts",
+                columns: table => new
+                {
+                    DiscountId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DiscountName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DiscountValue = table.Column<double>(type: "float", nullable: false),
+                    StartDate = table.Column<DateOnly>(type: "date", nullable: false),
+                    EndDate = table.Column<DateOnly>(type: "date", nullable: false),
+                    Active = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Discounts", x => x.DiscountId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Shoes",
                 columns: table => new
                 {
@@ -48,6 +80,70 @@ namespace ShoeStore.DataAccess.Migrations
                         column: x => x.CategoryId,
                         principalTable: "Categories",
                         principalColumn: "CategoryId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ImageShoes",
+                columns: table => new
+                {
+                    ImageShoeId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ShoeId = table.Column<int>(type: "int", nullable: false),
+                    ColorId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ImageShoes", x => x.ImageShoeId);
+                    table.ForeignKey(
+                        name: "FK_ImageShoes_Colors_ColorId",
+                        column: x => x.ColorId,
+                        principalTable: "Colors",
+                        principalColumn: "ColorId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ImageShoes_Shoes_ShoeId",
+                        column: x => x.ShoeId,
+                        principalTable: "Shoes",
+                        principalColumn: "ShoeId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SpecificShoes",
+                columns: table => new
+                {
+                    SpecificShoeId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ShoeId = table.Column<int>(type: "int", nullable: false),
+                    gender = table.Column<int>(type: "int", nullable: false),
+                    Size = table.Column<int>(type: "int", nullable: false),
+                    ColorId = table.Column<int>(type: "int", nullable: false),
+                    DiscountId = table.Column<int>(type: "int", nullable: false),
+                    Price = table.Column<double>(type: "float", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SpecificShoes", x => x.SpecificShoeId);
+                    table.ForeignKey(
+                        name: "FK_SpecificShoes_Colors_ColorId",
+                        column: x => x.ColorId,
+                        principalTable: "Colors",
+                        principalColumn: "ColorId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_SpecificShoes_Discounts_DiscountId",
+                        column: x => x.DiscountId,
+                        principalTable: "Discounts",
+                        principalColumn: "DiscountId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_SpecificShoes_Shoes_ShoeId",
+                        column: x => x.ShoeId,
+                        principalTable: "Shoes",
+                        principalColumn: "ShoeId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -78,14 +174,51 @@ namespace ShoeStore.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_ImageShoes_ColorId",
+                table: "ImageShoes",
+                column: "ColorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ImageShoes_ShoeId",
+                table: "ImageShoes",
+                column: "ShoeId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Shoes_CategoryId",
                 table: "Shoes",
                 column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SpecificShoes_ColorId",
+                table: "SpecificShoes",
+                column: "ColorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SpecificShoes_DiscountId",
+                table: "SpecificShoes",
+                column: "DiscountId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SpecificShoes_ShoeId",
+                table: "SpecificShoes",
+                column: "ShoeId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "ImageShoes");
+
+            migrationBuilder.DropTable(
+                name: "SpecificShoes");
+
+            migrationBuilder.DropTable(
+                name: "Colors");
+
+            migrationBuilder.DropTable(
+                name: "Discounts");
+
             migrationBuilder.DropTable(
                 name: "Shoes");
 

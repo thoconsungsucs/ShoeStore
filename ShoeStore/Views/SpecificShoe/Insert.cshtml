@@ -42,11 +42,11 @@
             </div>
 
             <div class="mb-3">
-                <label asp-for="SpecificShoe.GenderId" class="form-label"></label>
-                <select asp-for="SpecificShoe.GenderId" asp-items="@Model.GenderList" class="form-select">
+                <label asp-for="SpecificShoe.Gender" class="form-label"></label>
+                <select asp-for="SpecificShoe.Gender" asp-items="@Model.GenderList" class="form-select">
                     <option disabled selected>-- Select Gender --</option>
                 </select>
-                <span asp-validation-for="SpecificShoe.GenderId" class="text-danger"></span>
+                <span asp-validation-for="SpecificShoe.Gender" class="text-danger"></span>
 
             </div>
 
