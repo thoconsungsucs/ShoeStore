@@ -9,7 +9,7 @@ namespace ShoeStore.DataAccess.Repository
         public ICategoryRepository Category { get; private set; }
         public IShoeRepository Shoe { get; private set; }
         public IColorRepository Color { get; private set; }
-        public IImageShoeRepository ImageShoe { get; private set; }
+        public IShoeImageRepository ShoeImage { get; private set; }
         /*        public IGenderRepository Gender { get; private set; }
                 public ISizeRepository Size { get; private set; }*/
         public IDiscountRepository Discount { get; private set; }
@@ -20,7 +20,7 @@ namespace ShoeStore.DataAccess.Repository
             Category = new CategoryRepository(_db);
             Shoe = new ShoeRepository(_db);
             Color = new ColorRepository(_db);
-            ImageShoe = new ImageShoeRepository(_db);
+            ShoeImage = new ShoeImageRepository(_db);
             /*            Gender = new GenderRepository(_db);
                         Size = new SizeRepository(_db);*/
             Discount = new DiscountRepository(_db);

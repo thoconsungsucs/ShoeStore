@@ -51,7 +51,7 @@ namespace ShoeStore.Models
         [ForeignKey("ColorId, DiscountId")]
         [NotMapped]
         [ValidateNever]
-        public ICollection<ImageShoe>? ImageShoes { get; set; }
+        public ICollection<ShoeImage>? ImageShoes { get; set; }
 
 
 

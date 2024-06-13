@@ -3,10 +3,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ShoeStore.Models
 {
-    public class ImageShoe
+    public class ShoeImage
     {
         [Key]
-        public int ImageShoeId { get; set; }
+        public int ShoeImageId { get; set; }
         public string ImageUrl { get; set; }
         public int ShoeId { get; set; }
         [ForeignKey("ShoeId")]
@@ -14,5 +14,6 @@ namespace ShoeStore.Models
         public int ColorId { get; set; }
         [ForeignKey("ColorId")]
         public Color Color { get; set; }
+        public bool IsMain { get; set; }
     }
 }

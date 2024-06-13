@@ -4,15 +4,15 @@ using ShoeStore.Models;
 
 namespace ShoeStore.DataAccess.Repository
 {
-    public class ImageShoeRepository : Repository<ImageShoe>, IImageShoeRepository
+    public class ShoeImageRepository : Repository<ShoeImage>, IShoeImageRepository
     {
         private readonly ApplicationDbContext _db;
-        public ImageShoeRepository(ApplicationDbContext db) : base(db)
+        public ShoeImageRepository(ApplicationDbContext db) : base(db)
         {
             _db = db;
         }
 
-        public void Update(ImageShoe ImageShoe)
+        public void Update(ShoeImage ImageShoe)
         {
             _db.Update(ImageShoe);
         }

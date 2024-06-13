@@ -5,7 +5,7 @@
         IShoeRepository Shoe { get; }
         ICategoryRepository Category { get; }
         IColorRepository Color { get; }
-        IImageShoeRepository ImageShoe { get; }
+        IShoeImageRepository ShoeImage { get; }
         /*        IGenderRepository Gender { get; }
                 ISizeRepository Size { get; }*/
         IDiscountRepository Discount { get; }

@@ -9,14 +9,14 @@ namespace ShoeStore.DataAccess.Data
         {
 
         }
-        DbSet<Category> Categories { get; set; }
-        DbSet<Shoe> Shoes { get; set; }
-        DbSet<Color> Colors { get; set; }
-        DbSet<ImageShoe> ImageShoes { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Shoe> Shoes { get; set; }
+        public DbSet<Color> Colors { get; set; }
+        public DbSet<ShoeImage> ShoeImages { get; set; }
         /*        DbSet<Size> Sizes { get; set; }
                 DbSet<Gender> Genders { get; set; }*/
-        DbSet<Discount> Discounts { get; set; }
-        DbSet<SpecificShoe> SpecificShoes { get; set; }
+        public DbSet<Discount> Discounts { get; set; }
+        public DbSet<SpecificShoe> SpecificShoes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
