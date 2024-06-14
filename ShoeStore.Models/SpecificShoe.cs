@@ -10,30 +10,15 @@ namespace ShoeStore.Models
         public int SpecificShoeId { get; set; }
 
         [Required]
-        public int ShoeId { get; set; }
-        [ValidateNever]
-        public Shoe Shoe { get; set; }
+        public int ColorShoeId { get; set; }
+        [ForeignKey("ColorShoeId")]
+        public ColorShoe ColorShoe { get; set; }
 
         [Required]
         public Gender Gender { get; set; }
 
         [Required]
         public int Size { get; set; }
-
-        /*        [Required]
-                [Display(Name = "Gender")]*/
-        /*        public int GenderId { get; set; }
-                [ValidateNever]
-                public int Gender { get; set; }*/
-
-        [Required]
-        [Display(Name = "Color")]
-        public int ColorId { get; set; }
-        [ValidateNever]
-        public virtual Color Color { get; set; }
-
-        /*        public int SizeId { get; set; }*/
-        /*        public virtual Size Size { get; set; }*/
 
         [Required]
         [Display(Name = "Discount")]

@@ -7,13 +7,11 @@ namespace ShoeStore.Models
     {
         [Key]
         public int ShoeImageId { get; set; }
+        public int ColorShoeId { get; set; }
+        [ForeignKey("ColorShoeId")]
+        public ColorShoe ColorShoe { get; set; }
         public string ImageUrl { get; set; }
-        public int ShoeId { get; set; }
-        [ForeignKey("ShoeId")]
-        public Shoe Shoe { get; set; }
-        public int ColorId { get; set; }
-        [ForeignKey("ColorId")]
-        public Color Color { get; set; }
+
         public bool IsMain { get; set; }
     }
 }

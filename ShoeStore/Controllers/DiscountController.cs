@@ -39,7 +39,7 @@ namespace ShoeStore.Controllers
         public IActionResult Upsert(Discount Discount)
         {
             //Add new Discount
-            if (Discount.DiscountId == null || Discount.DiscountId == 0)
+            if (Discount.DiscountId == 0)
             {
                 _unitOfWork.Discount.Add(Discount);
                 TempData["Success"] = "Discount added successfully";

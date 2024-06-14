@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using ShoeStore.DataAccess.Repository.IRepository;
 using ShoeStore.Models;
 using System.Diagnostics;
 
@@ -7,14 +8,16 @@ namespace ShoeStore.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private readonly IUnitOfWork _unitOfWork;
+        public HomeController(ILogger<HomeController> logger, IUnitOfWork unitOfWork)
         {
+            _unitOfWork = unitOfWork;
             _logger = logger;
         }
 
         public IActionResult Index()
         {
+            _unitOfWork.SpecificShoe.Test();
             return View();
         }
 

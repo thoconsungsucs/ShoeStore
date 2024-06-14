@@ -39,7 +39,7 @@ namespace ShoeStore.Controllers
         public IActionResult Upsert(Color Color)
         {
             //Add new Color
-            if (Color.ColorId == null || Color.ColorId == 0)
+            if (Color.ColorId == 0)
             {
                 _unitOfWork.Color.Add(Color);
                 Color.DateUpdated = DateOnly.FromDateTime(DateTime.UtcNow);

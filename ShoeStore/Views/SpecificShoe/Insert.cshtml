@@ -63,11 +63,11 @@
             </div>
 
             <div class="mb-3">
-                <label asp-for="SpecificShoe.ColorId" class="form-label"></label>
-                <select asp-for="SpecificShoe.ColorId" asp-items="@Model.ColorList" class="form-select">
+                <label asp-for="SpecificShoe.ColorShoe.ColorId" class="form-label"></label>
+                <select asp-for="SpecificShoe.ColorShoe.ColorId" asp-items="@Model.ColorList" class="form-select">
                     <option disabled selected>-- Select Color --</option>
                 </select>
-                <span asp-validation-for="SpecificShoe.ColorId" class="text-danger"></span>
+                <span asp-validation-for="SpecificShoe.ColorShoe.ColorId" class="text-danger"></span>
             </div>
 
             <div class="mb-3">

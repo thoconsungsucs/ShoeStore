@@ -72,8 +72,9 @@ namespace ShoeStore.Controllers
 
 
             // Get all specific shoes with number of color, max discount and image url each color
-            var specificShoeListVM = _unitOfWork.SpecificShoe.GetAllGroupByShoeAndGender();
-            return View(specificShoeListVM);
+            /*          var specificShoeListVM = _unitOfWork.SpecificShoe.GetAllGroupByShoeAndGender();*/
+
+            return View();
         }
 
         public IActionResult Insert(int id)
@@ -106,9 +107,23 @@ namespace ShoeStore.Controllers
                 TempData["Success"] = "Error while saving";
                 return RedirectToAction(nameof(Index));
             }
+            var colorShoe = _unitOfWork.ColorShoe.Get(cs => cs.ColorId == specificShoeVM.SpecificShoe.ColorShoe.ColorId
+                                                      && cs.ShoeId == specificShoeVM.Shoe.ShoeId);
+            if (colorShoe == null)
+            {
+                // Add new color shoe
+                colorShoe = new ColorShoe
+                {
+                    ColorId = specificShoeVM.SpecificShoe.ColorShoe.ColorId,
+                    ShoeId = specificShoeVM.Shoe.ShoeId
+                };
+                _unitOfWork.ColorShoe.Add(colorShoe);
+                _unitOfWork.Save();
+            }
 
             string wwwRootPath = _webHostEnviroment.WebRootPath;
-            string color = _unitOfWork.Color.Get(s => s.ColorId == specificShoeVM.SpecificShoe.ColorId).ColorName;
+            // Get color name to create folder
+            string color = _unitOfWork.Color.Get(s => s.ColorId == specificShoeVM.SpecificShoe.ColorShoe.ColorId).ColorName;
 
             string filePath = Path.Combine("images", "shoes", color + " " + specificShoeVM.Shoe.ShoeName);
             string directoryPath = Path.Combine(wwwRootPath, filePath);
@@ -130,8 +145,7 @@ namespace ShoeStore.Controllers
                 ShoeImage imageShoe = new ShoeImage
                 {
                     ImageUrl = @"\" + filePath + @"\" + fileName,
-                    ColorId = specificShoeVM.SpecificShoe.ColorId,
-                    ShoeId = specificShoeVM.Shoe.ShoeId,
+                    ColorShoeId = colorShoe.ColorShoeId,
                     IsMain = isMain
                 };
                 _unitOfWork.ShoeImage.Add(imageShoe);
@@ -142,9 +156,8 @@ namespace ShoeStore.Controllers
             {
                 SpecificShoe curShoe = new SpecificShoe
                 {
-                    ShoeId = specificShoeVM.Shoe.ShoeId,
+                    ColorShoeId = colorShoe.ColorShoeId,
                     Gender = specificShoeVM.SpecificShoe.Gender,
-                    ColorId = specificShoeVM.SpecificShoe.ColorId,
                     Size = size,
                     DiscountId = specificShoeVM.SpecificShoe.DiscountId,
                     Price = specificShoeVM.SpecificShoe.Price,

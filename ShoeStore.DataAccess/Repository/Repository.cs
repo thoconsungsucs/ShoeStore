@@ -9,7 +9,6 @@ namespace ShoeStore.DataAccess.Repository
     {
         private readonly ApplicationDbContext _db;
         public DbSet<T> dbSet;
-        private ApplicationDbContext db;
 
         public Repository(ApplicationDbContext db)
         {

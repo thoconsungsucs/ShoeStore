@@ -50,7 +50,7 @@ namespace ShoeStore.Controllers
         public IActionResult Upsert(Shoe Shoe)
         {
             //Add new Shoe
-            if (Shoe.ShoeId == null || Shoe.ShoeId == 0)
+            if (Shoe.ShoeId == 0)
             {
                 _unitOfWork.Shoe.Add(Shoe);
                 TempData["Success"] = "Shoe added successfully";
