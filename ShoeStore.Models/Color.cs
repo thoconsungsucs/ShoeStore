@@ -11,7 +11,7 @@ namespace ShoeStore.Models
         [StringLength(50)]
         public string ColorName { get; set; }
         public bool Active { get; set; }
-        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:dddd, dd/MM/yyyy }", ApplyFormatInEditMode = true)]
         public DateOnly DateUpdated { get; set; }
     }
 }

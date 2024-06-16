@@ -19,62 +19,22 @@ namespace ShoeStore.Controllers
 
         public IActionResult Index()
         {
-            /*var specificShoeList = _unitOfWork.SpecificShoe.GetAll(includeProperties: "Shoe,Discount")
-                                    .GroupBy(s => new { s.Shoe.ShoeName, s.Gender, s.ShoeId })
-                                    .Select(table => new
-                                    {
-                                        ShoeName = table.Key.ShoeName,
-                                        Gender = table.Key.Gender,
-                                        TotalColor = table.Select(s => s.ColorId).Distinct().Count(),
-                                        DiscountMax = table.Select(s => s.Discount.DiscountValue).Max(),
-                                        ShoeId = table.Key.ShoeId,
-                                        FirstColorId = table.Select(s => s.ColorId).FirstOrDefault(),
-                                    }).Join(_unitOfWork.ImageShoe,
-                                            ImageShoe => new { ImageShoe.ShoeId, ImageShoe.ColorId },
-                                            SpecificShoe => new { SpecificShoe.ShoeId, SpecificShoe.FirstColorId },
-                                            (ImageShoe, SpecificShoe) => new
-                                            {
-                                                SpecificShoe.ShoeId = ImageShoe.ShoeId,
-                                                SpecificShoe.FirstColorId = ImageShoe.ColorId,
-                                            }
-                                    );
-            var shoeId = specificShoeList.Select(s => new
+
+            var specificShoeList = new SpecificShoeListVM
             {
-                ShoeId = s.ShoeId,
-                FirstColorId = s.FirstColorId
-            }).ToList();*/
-
-            /*var specificShoeList = _unitOfWork.SpecificShoe.GetAll(includeProperties: "Shoe,Discount")
-                        .GroupBy(s => new { s.Shoe.ShoeName, s.Gender, s.ShoeId })
-                        .Select(group => new
-                        {
-                            ShoeName = group.Key.ShoeName,
-                            Gender = group.Key.Gender,
-                            TotalColor = group.Select(s => s.ColorId).Distinct().Count(),
-                            DiscountMax = group.Select(s => s.Discount.DiscountValue).Max(),
-                            ShoeId = group.Key.ShoeId,
-                            ColorId = group.Select(s => s.ColorId).FirstOrDefault(),
-
-                        })
-                        .Join(_unitOfWork.ImageShoe.GetAll(),
-                              specificShoe => new { specificShoe.ShoeId, specificShoe.ColorId },
-                              imageShoe => new { imageShoe.ShoeId, imageShoe.ColorId },
-                              (specificShoe, imageShoe) => new
-                              {
-                                  specificShoe.ShoeName,
-                                  specificShoe.Gender,
-                                  specificShoe.TotalColor,
-                                  specificShoe.DiscountMax,
-                                  specificShoe.ShoeId,
-                                  specificShoe.ColorId,
-                                  ImageShoePath = imageShoe.ImageUrl
-                              }).ToList();*/
-
-
-            // Get all specific shoes with number of color, max discount and image url each color
-            /*          var specificShoeListVM = _unitOfWork.SpecificShoe.GetAllGroupByShoeAndGender();*/
-
-            return View();
+                SpecificShoeList = _unitOfWork.SpecificShoe.Test(),
+                ColorList = _unitOfWork.Color.GetAll().Select(c => new SelectListItem
+                {
+                    Text = c.ColorName,
+                    Value = c.ColorId.ToString()
+                }).ToList(),
+                CategoryList = _unitOfWork.Category.GetAll().Select(c => new SelectListItem
+                {
+                    Text = c.CategoryName,
+                    Value = c.CategoryId.ToString()
+                }).ToList()
+            };
+            return View(specificShoeList);
         }
 
         public IActionResult Insert(int id)

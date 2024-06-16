@@ -1,1 +1,137 @@
-﻿<h1>Add Specific Shoe</h1>
+﻿@model SpecificShoeListVM
+<div class="flex-shrink-0 p-3 bg-white pt-0" id="leftsidebar" style="width: 200px;">
+    <a href="/" class="d-flex mb-2 link-dark text-decoration-none">
+        <h2>Shoes</h2>
+    </a>
+
+
+    <ul class="list-unstyled ps-0">
+        <div class="category mb-4">
+            @foreach (var category in Model.CategoryList)
+            {
+                <p class="text-start h5">@category.Text</p>
+            }
+        </div>
+
+        <li class="border-top my-3"></li>
+        <li class="mb-1">
+            <button class="btn btn-toggle align-items-center rounded collapsed p-0" data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="true">
+                <h5 class="text-start">Gender</h5>
+            </button>
+            <div class="collapse show" id="home-collapse">
+                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                    @foreach (var gender in SD.GenderList)
+                    {
+                        <div class="h6 m-0">
+                            <input type="checkbox">
+                            <label class="form-label">@gender.Text</label>
+                        </div>
+                    }
+                </ul>
+            </div>
+        </li>
+
+        <li class="border-top my-3"></li>
+        <li class="mb-1">
+            <button class="btn btn-toggle align-items-center rounded collapsed p-0" data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="true">
+                <h5 class="text-start">Shop By Offer</h5>
+            </button>
+            <div class="collapse show" id="home-collapse">
+                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                    @foreach (var price in SD.PriceList)
+                    {
+                        <div class="h6 m-0">
+                            <input type="checkbox">
+                            <label class="form-label">@price.Text$</label>
+                        </div>
+                    }
+                </ul>
+            </div>
+        </li>
+
+        <li class="border-top my-3"></li>
+        <li class="mb-1">
+            <button class="btn btn-toggle align-items-center rounded collapsed p-0" data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="true">
+                <h5 class="text-start">Size</h5>
+            </button>
+            <div class="collapse show" id="home-collapse">
+                <div class=" mb-3 flex flex-wrap" data-toggle="buttons" style="width:200px;">
+                    @foreach (var size in SD.SizeList)
+                    {
+                        <label class="btn btn-outline-dark" style="margin-right: 5px; width:50px; margin-bottom:5px">
+                            <input type="checkbox" name="SizeSelected" value="@size.Value" style="display: none;"> @size.Text
+                        </label>
+                    }
+                </div>
+            </div>
+        </li>
+
+        <li class="border-top my-3"></li>
+        <li class="mb-1">
+            <button class="btn btn-toggle align-items-center rounded collapsed p-0" data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="true">
+                <h5 class="text-start">Color</h5>
+            </button>
+            <div class="collapse show" id="home-collapse">
+                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                    @foreach(var color in Model.ColorList)
+                    {
+                        <input type="checkbox">
+                        <label class="form-label">@color.Text</label>
+                    }
+                </ul>
+            </div>
+        </li>
+
+    </ul>
+</div>
+
+<div class="container p-3" style="margin-left:45px; margin-top:80px">
+    <div class="row">
+        <!-- Card 1 -->
+        @foreach (var shoe in Model.SpecificShoeList)
+        {
+            <div class="col-md-4 col-sm-3">
+                <div class="card mb-4 ">
+                    <img src="@shoe.ImageList.First().ImageUrl" class="card-img-top">
+                    <div class="small-images">
+                        @foreach (var image in shoe.ImageList)
+                        {
+                            <img src="@image.ImageUrl" class="small-img">
+                        }
+                    </div>
+                    <div class="card-body p-0 pt-4">
+                        <h5 class="card-title">@shoe.ShoeName</h5>
+                        <p class="card-text">@shoe.Gender's Shoes<br>@shoe.ImageList.Count() @(shoe.ImageList.Count() > 1 ? "Colours" : "Colour")</p>
+                        <p class="price">@shoe.Price$<br><span class="discount">@shoe.DiscountMax% off</span></p>
+                    </div>
+                </div>
+            </div>
+        }
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        $(document).ready(function () {
+
+            $('.btn-outline-dark').on('click', function () {
+                var $input = $(this).find('input');
+                if ($input.is(':checked')) {
+                    $(this).css({
+                        'background-color': '',
+                        'color': '',
+                        'border-color': ''
+                    });
+                    $input.prop('checked', false);
+                } else {
+                    $(this).css({
+                        'background-color': 'black',
+                        'color': 'white',
+                        'border-color': '#007bff'
+                    });
+                    $input.prop('checked', true);
+                }
+            });
+        });
+    </script>
+}

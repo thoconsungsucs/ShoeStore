@@ -22,7 +22,7 @@ namespace ShoeStore.Models
 
         [Required]
         [Display(Name = "Discount")]
-        public int DiscountId { get; set; }
+        public int? DiscountId { get; set; }
         [ValidateNever]
         public Discount Discount { get; set; }
 

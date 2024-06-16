@@ -1,4 +1,4 @@
-html {
+﻿html {
   font-size: 14px;
 }
 
@@ -20,3 +20,68 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.card {
+    border: none;
+    overflow: hidden;
+    position: relative;
+}
+
+.card-img-top {
+    height: 300px;
+    object-fit: cover;
+    transition: opacity 0.3s ease;
+}
+
+.small-images {
+    display: none;
+    position: absolute;
+    bottom: 110px
+}
+
+.small-img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border: 1px solid #ddd;
+}
+
+.card:hover .small-images {
+    display: block;
+}
+
+.card-title, .card-text, {
+    transition: opacity 0.3s ease;
+}
+
+.card:hover .card-title, .card:hover .card-text {
+    opacity: 0;
+}
+
+.price {
+    font-weight: bold;
+    color: #333;
+}
+
+.discount {
+    color: #007D48
+}
+
+.price {
+    font-weight: bold;
+    color: #333;
+}
+
+.promo {
+    color: red;
+    font-weight: bold;
+}
+
+#leftsidebar {
+    position: absolute; 
+    left: 30px;
+    top: 95px;
+
+}
+
+

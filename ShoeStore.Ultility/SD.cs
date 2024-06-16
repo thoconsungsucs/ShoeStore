@@ -25,5 +25,15 @@ namespace ShoeStore.Ultility
             new SelectListItem {Text = "Kids", Value = "2"},
             new SelectListItem {Text = "Unisex", Value = "3"},
         };
+
+        public static List<SelectListItem> PriceList = new List<SelectListItem>
+        {
+            new SelectListItem {Text = "0-100", Value = "0-100"},
+            new SelectListItem {Text = "100-200", Value = "100-200"},
+            new SelectListItem {Text = "200-300", Value = "200-300"},
+            new SelectListItem {Text = "Over 300", Value = "300-100000"},
+        };
+
+
     }
 }

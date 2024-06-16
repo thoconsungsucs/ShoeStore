@@ -1,4 +1,5 @@
 ﻿using ShoeStore.Models;
+using ShoeStore.Models.ViewModel;
 
 namespace ShoeStore.DataAccess.Repository.IRepository
 {
@@ -6,6 +7,6 @@ namespace ShoeStore.DataAccess.Repository.IRepository
     {
         void Update(SpecificShoe specificShoe);
         /*        IEnumerable<SpecificShoeListVM> GetAllGroupByShoeAndGender();*/
-        void Test();
+        List<SpecificShoeWithImage> Test();
     }
 }

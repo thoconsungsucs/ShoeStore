@@ -2,6 +2,7 @@
 using ShoeStore.DataAccess.Data;
 using ShoeStore.DataAccess.Repository.IRepository;
 using ShoeStore.Models;
+using ShoeStore.Models.ViewModel;
 
 namespace ShoeStore.DataAccess.Repository
 {
@@ -51,25 +52,27 @@ namespace ShoeStore.DataAccess.Repository
             return specificShoeListWithImg;
         }*/
 
-        public void Test()
+        public List<SpecificShoeWithImage> Test()
         {
             var list = _db.SpecificShoes
                 .Include("ColorShoe")
                 .Include("Discount")
                 .GroupBy(s => new { s.Gender, s.ColorShoe.ShoeId })
-                .Select(group => new
+                .Select(group => new SpecificShoeWithImage
                 {
                     ShoeName = _db.Shoes.First(s => s.ShoeId == group.Key.ShoeId).ShoeName,
                     Gender = group.Key.Gender,
+                    Price = group.Select(s => s.Price).FirstOrDefault(),
                     TotalColors = group.Select(s => s.ColorShoeId).Distinct().Count(),
                     DiscountMax = group.Select(s => s.Discount.DiscountValue).Max(),
-                    ImageList = group.Select(s => s.ColorShoeId).Distinct().Select(c => new
+                    ImageList = group.Select(s => s.ColorShoeId).Distinct().Select(c => new ColorImage
                     {
                         ColorId = c,
                         ImageUrl = _db.ShoeImages.First(i => i.ColorShoeId == c && i.IsMain).ImageUrl
                     })
                 })
                 .ToList();
+            return list;
         }
     }
 }
