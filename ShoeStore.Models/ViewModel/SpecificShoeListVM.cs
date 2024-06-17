@@ -22,7 +22,7 @@ namespace ShoeStore.Models.ViewModel
 
     public class ColorImage
     {
-        public int ColorId { get; set; }
+        public int ColorShoeId { get; set; }
         public string ImageUrl { get; set; }
     }
 

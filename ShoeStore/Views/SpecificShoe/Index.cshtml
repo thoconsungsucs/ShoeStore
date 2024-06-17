@@ -1,4 +1,5 @@
-﻿@model SpecificShoeListVM
+﻿@using System.Web
+@model SpecificShoeListVM
 <div class="flex-shrink-0 p-3 bg-white pt-0" id="leftsidebar" style="width: 200px;">
     <a href="/" class="d-flex mb-2 link-dark text-decoration-none">
         <h2>Shoes</h2>
@@ -73,7 +74,7 @@
             </button>
             <div class="collapse show" id="home-collapse">
                 <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                    @foreach(var color in Model.ColorList)
+                    @foreach (var color in Model.ColorList)
                     {
                         <input type="checkbox">
                         <label class="form-label">@color.Text</label>
@@ -91,47 +92,58 @@
         @foreach (var shoe in Model.SpecificShoeList)
         {
             <div class="col-md-4 col-sm-3">
-                <div class="card mb-4 ">
-                    <img src="@shoe.ImageList.First().ImageUrl" class="card-img-top">
-                    <div class="small-images">
-                        @foreach (var image in shoe.ImageList)
-                        {
-                            <img src="@image.ImageUrl" class="small-img">
-                        }
+                <a asp-controller="SpecificShoe" asp-action="Details" asp-route-colorId="@shoe.ImageList.First().ColorShoeId" class="text-decoration-none">
+                    <div class="card mb-4 ">
+                        <img id="mainImage" src="@shoe.ImageList.First().ImageUrl" class="card-img-top">
+                        <div class="small-images">
+                            @foreach (var image in shoe.ImageList)
+                            {
+
+                                <img src="@image.ImageUrl" class="small-img" onmouseover="changeMainImage(this, '@HttpUtility.UrlEncode(image.ImageUrl)', @image.ColorShoeId)">
+                            }
+                        </div>
+                        <div class="card-body p-0 pt-4">
+                            <h5 class="card-title">@shoe.ShoeName</h5>
+                            <p class="card-text">@shoe.Gender's Shoes<br>@shoe.ImageList.Count() @(shoe.ImageList.Count() > 1 ? "Colours" : "Colour")</p>
+                            <p class="price">@shoe.Price$<br><span class="discount">@(shoe.DiscountMax * 100)% off</span></p>
+                        </div>
                     </div>
-                    <div class="card-body p-0 pt-4">
-                        <h5 class="card-title">@shoe.ShoeName</h5>
-                        <p class="card-text">@shoe.Gender's Shoes<br>@shoe.ImageList.Count() @(shoe.ImageList.Count() > 1 ? "Colours" : "Colour")</p>
-                        <p class="price">@shoe.Price$<br><span class="discount">@shoe.DiscountMax% off</span></p>
-                    </div>
-                </div>
+                </a>
             </div>
         }
-</div>
+    </div>
 
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-    <script>
-        $(document).ready(function () {
+    @section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+        <script>
+            $(document).ready(function () {
 
-            $('.btn-outline-dark').on('click', function () {
-                var $input = $(this).find('input');
-                if ($input.is(':checked')) {
-                    $(this).css({
-                        'background-color': '',
-                        'color': '',
-                        'border-color': ''
-                    });
-                    $input.prop('checked', false);
-                } else {
-                    $(this).css({
-                        'background-color': 'black',
-                        'color': 'white',
-                        'border-color': '#007bff'
-                    });
-                    $input.prop('checked', true);
-                }
+                $('.btn-outline-dark').on('click', function () {
+                    var $input = $(this).find('input');
+                    if ($input.is(':checked')) {
+                        $(this).css({
+                            'background-color': '',
+                            'color': '',
+                            'border-color': ''
+                        });
+                        $input.prop('checked', false);
+                    } else {
+                        $(this).css({
+                            'background-color': 'black',
+                            'color': 'white',
+                            'border-color': '#007bff'
+                        });
+                        $input.prop('checked', true);
+                    }
+                });
             });
-        });
-    </script>
-}
+
+            function changeMainImage(element, newSrc, colorShoeId) {
+                const cardDiv = element.closest('.card.mb-4');
+                const mainImage = cardDiv.querySelector('.card-img-top');
+                const link = mainImage.closest('a');
+                link.href = `/SpecificShoe/Details/?colorId=${colorShoeId}`;
+                mainImage.src = newSrc;
+            }
+        </script>
+    }

@@ -20,6 +20,7 @@ namespace ShoeStore.Controllers
         public IActionResult Index()
         {
 
+
             var specificShoeList = new SpecificShoeListVM
             {
                 SpecificShoeList = _unitOfWork.SpecificShoe.Test(),
@@ -85,7 +86,7 @@ namespace ShoeStore.Controllers
             // Get color name to create folder
             string color = _unitOfWork.Color.Get(s => s.ColorId == specificShoeVM.SpecificShoe.ColorShoe.ColorId).ColorName;
 
-            string filePath = Path.Combine("images", "shoes", color + " " + specificShoeVM.Shoe.ShoeName);
+            string filePath = Path.Combine("images", "shoes", color + " " + specificShoeVM.Shoe.ShoeName.Replace(' ', '_'));
             string directoryPath = Path.Combine(wwwRootPath, filePath);
 
             if (!Directory.Exists(directoryPath))
@@ -128,6 +129,17 @@ namespace ShoeStore.Controllers
             _unitOfWork.Save();
             TempData["Success"] = "Specific Shoe added successfully";
             return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult Details(int colorId)
+        {
+            var specificShoeList = _unitOfWork.SpecificShoe.GetAll(s => s.ColorShoeId == colorId, includeProperties: "ColorShoe,Discount").ToList();
+            var shoeImageList = _unitOfWork.ShoeImage.GetAll(i => i.ColorShoeId == colorId && !i.IsMain).ToList();
+            foreach (var specificShoe in specificShoeList)
+            {
+                specificShoe.ImageShoes = shoeImageList;
+            }
+            return View(specificShoeList[0]);
         }
     }
 }

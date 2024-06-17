@@ -1,0 +1,47 @@
+﻿@using System.Web
+@model SpecificShoe
+<div class="container mt-5">
+    <div class="row mt-5">
+        <div class="col-md-1">
+            <div class="product-images">
+                @foreach (var image in Model.ImageShoes)
+                {
+                    <img src="@image.ImageUrl" class="small-img border-0" onmouseover="changeMainImage('@HttpUtility.UrlEncode(image.ImageUrl)')">
+                }
+            </div>
+        </div>
+        <div class="col-md-5 border-0">
+            <img id="mainImage" src="@Model.ImageShoes[0].ImageUrl" class="main-image">
+        </div>
+        <div class="col-md-5 product-details mx-5">
+            <h1>Nike Air Force 1 '07 EasyOn</h1>
+            <p>Shoes</p>
+            <p class="price">3,239,000₫ <span class="discount">20% off</span></p>
+            <div class="size-options">
+                <p>Select Size</p>
+                <button class="btn btn-outline-secondary">EU 40</button>
+                <button class="btn btn-outline-secondary">EU 40.5</button>
+                <button class="btn btn-outline-secondary">EU 41</button>
+                <button class="btn btn-outline-secondary">EU 42</button>
+                <button class="btn btn-outline-secondary">EU 42.5</button>
+                <button class="btn btn-outline-secondary">EU 43</button>
+                <button class="btn btn-outline-secondary">EU 44</button>
+                <button class="btn btn-outline-secondary">EU 44.5</button>
+                <button class="btn btn-outline-secondary">EU 45</button>
+                <button class="btn btn-outline-secondary">EU 45.5</button>
+                <button class="btn btn-outline-secondary">EU 46</button>
+                <button class="btn btn-outline-secondary">EU 47</button>
+                <button class="btn btn-outline-secondary">EU 47.5</button>
+            </div>
+            <button class="btn btn-dark btn-lg btn-block mt-4">Add to Bag</button>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function changeMainImage(imageUrl) {
+            document.getElementById('mainImage').src = decodeURI(ima);
+        }
+    </script>
+}

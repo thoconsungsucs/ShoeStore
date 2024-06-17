@@ -67,7 +67,7 @@ namespace ShoeStore.DataAccess.Repository
                     DiscountMax = group.Select(s => s.Discount.DiscountValue).Max(),
                     ImageList = group.Select(s => s.ColorShoeId).Distinct().Select(c => new ColorImage
                     {
-                        ColorId = c,
+                        ColorShoeId = c,
                         ImageUrl = _db.ShoeImages.First(i => i.ColorShoeId == c && i.IsMain).ImageUrl
                     })
                 })
