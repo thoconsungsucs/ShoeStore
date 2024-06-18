@@ -8,5 +8,6 @@ namespace ShoeStore.DataAccess.Repository.IRepository
         void Update(SpecificShoe specificShoe);
         /*        IEnumerable<SpecificShoeListVM> GetAllGroupByShoeAndGender();*/
         List<SpecificShoeWithImage> Test();
+        List<SpecificShoe> GetSpecificShoeListForSize(int colorShoeId, Gender gender);
     }
 }

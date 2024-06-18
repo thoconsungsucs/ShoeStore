@@ -131,15 +131,23 @@ namespace ShoeStore.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Details(int colorId)
+        public IActionResult Details(int colorShoeId, int shoeId, Gender gender)
         {
-            var specificShoeList = _unitOfWork.SpecificShoe.GetAll(s => s.ColorShoeId == colorId, includeProperties: "ColorShoe,Discount").ToList();
-            var shoeImageList = _unitOfWork.ShoeImage.GetAll(i => i.ColorShoeId == colorId && !i.IsMain).ToList();
-            foreach (var specificShoe in specificShoeList)
+            var specificShoeDetailVM = new SpecificShoeDetailsVM
             {
-                specificShoe.ImageShoes = shoeImageList;
-            }
-            return View(specificShoeList[0]);
+                ColorShoeIdWithImage = _unitOfWork.ColorShoe.GetColorShoeIdWithImage(shoeId, gender),
+                SpecificShoeListForSize = _unitOfWork.SpecificShoe.GetSpecificShoeListForSize(colorShoeId, gender),
+                ColorShoe = _unitOfWork.ColorShoe.Get(cs => cs.ColorShoeId == colorShoeId, includeProperties: "Shoe")
+            };
+
+            specificShoeDetailVM.ColorShoe.Images = _unitOfWork.ShoeImage.GetAll(si => si.ColorShoeId == colorShoeId && !si.IsMain).ToList();
+            return View(specificShoeDetailVM);
+        }
+
+        [HttpPost]
+        public IActionResult Details(int specificShoeId)
+        {
+            return View();
         }
     }
 }

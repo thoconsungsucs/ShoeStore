@@ -1,47 +1,74 @@
 ﻿@using System.Web
-@model SpecificShoe
+@model SpecificShoeDetailsVM
 <div class="container mt-5">
     <div class="row mt-5">
         <div class="col-md-1">
             <div class="product-images">
-                @foreach (var image in Model.ImageShoes)
+                @foreach (var image in Model.ColorShoe.Images)
                 {
                     <img src="@image.ImageUrl" class="small-img border-0" onmouseover="changeMainImage('@HttpUtility.UrlEncode(image.ImageUrl)')">
                 }
             </div>
         </div>
         <div class="col-md-5 border-0">
-            <img id="mainImage" src="@Model.ImageShoes[0].ImageUrl" class="main-image">
+            <img id="mainImage" src="@Model.ColorShoe.Images[0].ImageUrl" class="main-image">
         </div>
         <div class="col-md-5 product-details mx-5">
-            <h1>Nike Air Force 1 '07 EasyOn</h1>
-            <p>Shoes</p>
-            <p class="price">3,239,000₫ <span class="discount">20% off</span></p>
-            <div class="size-options">
-                <p>Select Size</p>
-                <button class="btn btn-outline-secondary">EU 40</button>
-                <button class="btn btn-outline-secondary">EU 40.5</button>
-                <button class="btn btn-outline-secondary">EU 41</button>
-                <button class="btn btn-outline-secondary">EU 42</button>
-                <button class="btn btn-outline-secondary">EU 42.5</button>
-                <button class="btn btn-outline-secondary">EU 43</button>
-                <button class="btn btn-outline-secondary">EU 44</button>
-                <button class="btn btn-outline-secondary">EU 44.5</button>
-                <button class="btn btn-outline-secondary">EU 45</button>
-                <button class="btn btn-outline-secondary">EU 45.5</button>
-                <button class="btn btn-outline-secondary">EU 46</button>
-                <button class="btn btn-outline-secondary">EU 47</button>
-                <button class="btn btn-outline-secondary">EU 47.5</button>
+            <h1>@Model.ColorShoe.Shoe.ShoeName</h1>
+            <p class="h4">@(Model.SpecificShoeListForSize.First().Gender)'s Shoe</p>
+            <p class="price h3 text-body">@Model.ColorShoe.Shoe.Price$</p>
+            <span class="discount">0</span><span class="text-danger">% off</span>
+            <div class="mt-3">
+                @foreach (var image in Model.ColorShoeIdWithImage)
+                {
+                    <a asp-controller="SpecificShoe" asp-action="Details" asp-route-colorShoeId="@image.ColorShoeId" asp-route-shoeId="@Model.ColorShoe.Shoe.ShoeId" asp-route-gender="@Model.SpecificShoeListForSize.First().Gender">
+                        <img src="@image.ImageUrl" class="small-img @(image.ColorShoeId == Model.ColorShoe.ColorShoeId ? "border-2" : "border-0")">
+                    </a>
+                }
             </div>
-            <button class="btn btn-dark btn-lg btn-block mt-4">Add to Bag</button>
+
+            <div class="size-options flex mt-3">
+                <p class="mb-1">Select Size</p>
+                @foreach (var specificShoe in Model.SpecificShoeListForSize)
+                {
+                    <button class="btn btn-outline-secondary m-0 @(specificShoe.Quantity <= 0 ? "disable" : "")" onclick="changeSize(@specificShoe.SpecificShoeId, @specificShoe.Price, @specificShoe.Discount.DiscountValue)">@specificShoe.Size</button>
+                }
+            </div>
+            <button id="addToBagBtn"  class="btn btn-dark btn-lg btn-block mt-4">Add to Bag</button>
         </div>
     </div>
 </div>
 
 @section Scripts {
     <script>
+        let selectedShoeId = null;
         function changeMainImage(imageUrl) {
-            document.getElementById('mainImage').src = decodeURI(ima);
+            document.getElementById('mainImage').src = decodeURI(imageUrl);
         }
+
+        function changeSize(specificShoeId, price, discount) {
+            selectedShoeId = specificShoeId;
+            document.querySelector('.price').innerText = price + "$";
+            document.querySelector('.discount').innerText = discount * 100;
+        }
+
+        $('#addToBagBtn').click(function () {
+            if (selectedShoeId != null) {
+                $.ajax({
+                    url: `/SpecificShoe/Details?specificShoeId=${selectedShoeId}`,
+                    type: 'POST',
+                    success: function (response) {
+                        console.log('Success:', response);
+                        // Xử lý phản hồi từ server
+                    },
+                    error: function (error) {
+                        console.error('Error:', error);
+                        // Xử lý lỗi
+                    }
+                });
+            } else {
+                alert('Please select a shoe size first.');
+            }
+        });
     </script>
 }

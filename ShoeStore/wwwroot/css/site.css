@@ -77,11 +77,11 @@ body {
     font-weight: bold;
 }
 
-#leftsidebar {
+/*#leftsidebar {
     position: absolute;
     left: 30px;
     top: 95px;
-}
+}*/
 
 
 a {
@@ -113,10 +113,7 @@ a {
     max-width: 100%;
 }
 
-.price {
-    font-size: 1.5rem;
-    font-weight: bold;
-}
+
 
 .discount {
     color: red;

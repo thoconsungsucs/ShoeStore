@@ -11,16 +11,16 @@ namespace ShoeStore.Models.ViewModel
 
     public class SpecificShoeWithImage
     {
+        public int ShoeId { get; set; }
         public string ShoeName { get; set; }
         public Gender Gender { get; set; }
         public double Price { get; set; }
         public int TotalColors { get; set; }
         public double DiscountMax { get; set; }
-        public int ShoeId { get; set; }
-        public IEnumerable<ColorImage> ImageList { get; set; }
+        public IEnumerable<ColorShoeImage> ImageList { get; set; }
     }
 
-    public class ColorImage
+    public class ColorShoeImage
     {
         public int ColorShoeId { get; set; }
         public string ImageUrl { get; set; }

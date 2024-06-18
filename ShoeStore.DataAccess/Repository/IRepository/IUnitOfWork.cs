@@ -11,6 +11,7 @@
         IDiscountRepository Discount { get; }
         ISpecificShoeRepository SpecificShoe { get; }
         IColorShoeRepository ColorShoe { get; }
+
         void Save();
     }
 }
