@@ -1,0 +1,29 @@
+﻿@using System.Web
+@model List<SpecificShoeWithImage>
+<div class="container col-10 p-3" id="specificShoeList">
+    <div class="row">
+        <!-- Card 1 -->
+        @foreach (var shoe in Model)
+        {
+            <div class="col-md-4 col-sm-3">
+                <a asp-controller="SpecificShoe" asp-action="Details" asp-route-colorShoeId="@shoe.ImageList.First().ColorShoeId" asp-route-shoeId="@shoe.ShoeId" asp-route-gender="@shoe.Gender" class="text-decoration-none">
+                    <div class="card mb-4 ">
+                        <img id="mainImage" src="@shoe.ImageList.First().ImageUrl" class="card-img-top">
+                        <div class="small-images">
+                            @foreach (var image in shoe.ImageList)
+                            {
+
+                                <img src="@image.ImageUrl" class="small-img" onmouseover="changeMainImage(this, '@HttpUtility.UrlEncode(image.ImageUrl)', @image.ColorShoeId)">
+                            }
+                        </div>
+                        <div class="card-body p-0 pt-4">
+                            <h5 class="card-title">@shoe.ShoeName</h5>
+                            <p class="card-text">@shoe.Gender's Shoes<br>@shoe.ImageList.Count() @(shoe.ImageList.Count() > 1 ? "Colours" : "Colour")</p>
+                            <p class="price">@shoe.Price$<br><span class="discount">@(shoe.DiscountMax * 100)% off</span></p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        }
+    </div>
+</div>

@@ -3,6 +3,7 @@ using ShoeStore.DataAccess.Data;
 using ShoeStore.DataAccess.Repository.IRepository;
 using ShoeStore.Models;
 using ShoeStore.Models.ViewModel;
+using System.Linq.Expressions;
 
 namespace ShoeStore.DataAccess.Repository
 {
@@ -52,26 +53,74 @@ namespace ShoeStore.DataAccess.Repository
             return specificShoeListWithImg;
         }*/
 
-        public List<SpecificShoeWithImage> Test()
+        public List<SpecificShoeWithImage> GetSpecificShoeWithImage(List<int>? categories = null, List<Gender>? genders = null, List<string>? prices = null, List<int>? sizes = null, List<int>? colors = null)
         {
-            var list = _db.SpecificShoes
-                .Include("ColorShoe")
+
+            var shoeColorShoeList = _db.Set<Shoe>()
+                .Join(
+                      _db.Set<ColorShoe>().Where(ss => colors == null || colors.Contains(ss.ColorShoeId)),
+                      s => s.ShoeId,
+                      cs => cs.ShoeId,
+                      (s, cs) => new { s.ShoeId, s.ShoeName, s.CategoryId, s.Price, cs.ColorShoeId }
+                 );
+            // Where category 
+            if (categories != null)
+            {
+                shoeColorShoeList = shoeColorShoeList.Where(s => categories.Contains(s.CategoryId));
+            }
+
+
+
+            var specificShoeList = _db.SpecificShoes
                 .Include("Discount")
-                .GroupBy(s => new { s.Gender, s.ColorShoe.ShoeId })
-                .Select(group => new SpecificShoeWithImage
+                .Where(ss => genders == null || genders.Contains(ss.Gender))
+                .Where(ss => sizes == null || sizes.Contains(ss.Size))
+                .Where(ss => colors == null || colors.Contains(ss.ColorShoeId));
+
+            if (prices != null && prices.Any())
+            {
+                var predicate = PredicateBuilder.False<SpecificShoe>();
+                foreach (var price in prices)
                 {
-                    ShoeId = group.Key.ShoeId,
-                    ShoeName = _db.Shoes.First(s => s.ShoeId == group.Key.ShoeId).ShoeName,
-                    Gender = group.Key.Gender,
-                    Price = group.Select(s => s.Price).FirstOrDefault(),
-                    TotalColors = group.Select(s => s.ColorShoeId).Distinct().Count(),
-                    DiscountMax = group.Select(s => s.Discount.DiscountValue).Max(),
-                    ImageList = group.Select(s => s.ColorShoeId).Distinct().Select(c => new ColorShoeImage
-                    {
-                        ColorShoeId = c,
-                        ImageUrl = _db.ShoeImages.First(i => i.ColorShoeId == c && i.IsMain).ImageUrl
-                    })
-                })
+                    var parts = price.Split('-');
+                    var left = double.Parse(parts[0]);
+                    var right = double.Parse(parts[1]);
+
+                    predicate = predicate.Or(ss => ss.Price >= left && ss.Price <= right);
+                }
+
+                specificShoeList = specificShoeList.Where(predicate);
+            }
+
+            var list = specificShoeList
+                .Join(
+                      shoeColorShoeList,
+                      specificShoe => specificShoe.ColorShoeId,
+                      shoeColorShoe => shoeColorShoe.ColorShoeId,
+                      (specificShoe, shoeColorShoe) => new
+                      {
+                          SpecificShoe = specificShoe,
+                          ShoeColorShoe = shoeColorShoe
+                      }
+               ).GroupBy(specificShoeShoeColorShoe => new
+               {
+                   specificShoeShoeColorShoe.SpecificShoe.Gender,
+                   specificShoeShoeColorShoe.ShoeColorShoe.ShoeId
+               }
+               ).Select(group => new SpecificShoeWithImage
+               {
+                   ShoeId = group.Key.ShoeId,
+                   ShoeName = group.First().ShoeColorShoe.ShoeName,
+                   Gender = group.Key.Gender,
+                   Price = group.First().ShoeColorShoe.Price,
+                   TotalColors = group.GroupBy(specificShoeShoeColorShoe => specificShoeShoeColorShoe.SpecificShoe.ColorShoeId).Count(),
+                   DiscountMax = group.Max(specificShoeShoeColorShoe => specificShoeShoeColorShoe.SpecificShoe.Discount.DiscountValue),
+                   ImageList = group.GroupBy(specificShoeShoeColorShoe => specificShoeShoeColorShoe.SpecificShoe.ColorShoeId).Select(x => new ColorShoeImage
+                   {
+                       ColorShoeId = x.Key,
+                       ImageUrl = _db.ShoeImages.First(i => i.ColorShoeId == x.Key && i.IsMain).ImageUrl
+                   })
+               })
                 .ToList();
             return list;
         }
@@ -91,5 +140,19 @@ namespace ShoeStore.DataAccess.Repository
         }
 
 
+
+    }
+    public static class PredicateBuilder
+    {
+        public static Expression<Func<T, bool>> True<T>() { return f => true; }
+        public static Expression<Func<T, bool>> False<T>() { return f => false; }
+
+        public static Expression<Func<T, bool>> Or<T>(this Expression<Func<T, bool>> expr1,
+            Expression<Func<T, bool>> expr2)
+        {
+            var invokedExpr = Expression.Invoke(expr2, expr1.Parameters.Cast<Expression>());
+            return Expression.Lambda<Func<T, bool>>
+                  (Expression.OrElse(expr1.Body, invokedExpr), expr1.Parameters);
+        }
     }
 }

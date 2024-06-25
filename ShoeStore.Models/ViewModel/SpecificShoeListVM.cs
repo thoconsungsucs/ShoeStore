@@ -14,7 +14,7 @@ namespace ShoeStore.Models.ViewModel
         public int ShoeId { get; set; }
         public string ShoeName { get; set; }
         public Gender Gender { get; set; }
-        public double Price { get; set; }
+        public decimal Price { get; set; }
         public int TotalColors { get; set; }
         public double DiscountMax { get; set; }
         public IEnumerable<ColorShoeImage> ImageList { get; set; }

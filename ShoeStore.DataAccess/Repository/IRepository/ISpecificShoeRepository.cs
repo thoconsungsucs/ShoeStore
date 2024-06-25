@@ -7,7 +7,7 @@ namespace ShoeStore.DataAccess.Repository.IRepository
     {
         void Update(SpecificShoe specificShoe);
         /*        IEnumerable<SpecificShoeListVM> GetAllGroupByShoeAndGender();*/
-        List<SpecificShoeWithImage> Test();
+        List<SpecificShoeWithImage> GetSpecificShoeWithImage(List<int>? categories = null, List<Gender>? genders = null, List<string>? prices = null, List<int>? sizes = null, List<int>? colors = null);
         List<SpecificShoe> GetSpecificShoeListForSize(int colorShoeId, Gender gender);
     }
 }

@@ -23,7 +23,7 @@ namespace ShoeStore.Controllers
 
             var specificShoeList = new SpecificShoeListVM
             {
-                SpecificShoeList = _unitOfWork.SpecificShoe.Test(),
+                SpecificShoeList = _unitOfWork.SpecificShoe.GetSpecificShoeWithImage(),
                 ColorList = _unitOfWork.Color.GetAll().Select(c => new SelectListItem
                 {
                     Text = c.ColorName,
@@ -149,5 +149,21 @@ namespace ShoeStore.Controllers
         {
             return View();
         }
+
+        [HttpGet]
+        public IActionResult Filter(List<int>? categories = null, List<Gender>? genders = null, List<string>? prices = null, List<int>? sizes = null, List<int>? colors = null)
+        {
+            var list = _unitOfWork.SpecificShoe
+                .GetSpecificShoeWithImage(
+                    categories,
+                    genders,
+                    prices,
+                    sizes,
+                    colors
+                );
+            return PartialView("_SpecificShoeListPartial", list);
+        }
+
+
     }
 }
