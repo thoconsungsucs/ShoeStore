@@ -58,7 +58,7 @@ namespace ShoeStore.DataAccess.Repository
 
             var shoeColorShoeList = _db.Set<Shoe>()
                 .Join(
-                      _db.Set<ColorShoe>().Where(ss => colors == null || colors.Contains(ss.ColorShoeId)),
+                      _db.Set<ColorShoe>().Where(ss => colors == null || colors.Contains(ss.ColorId)),
                       s => s.ShoeId,
                       cs => cs.ShoeId,
                       (s, cs) => new { s.ShoeId, s.ShoeName, s.CategoryId, s.Price, cs.ColorShoeId }
@@ -74,8 +74,7 @@ namespace ShoeStore.DataAccess.Repository
             var specificShoeList = _db.SpecificShoes
                 .Include("Discount")
                 .Where(ss => genders == null || genders.Contains(ss.Gender))
-                .Where(ss => sizes == null || sizes.Contains(ss.Size))
-                .Where(ss => colors == null || colors.Contains(ss.ColorShoeId));
+                .Where(ss => sizes == null || sizes.Contains(ss.Size));
 
             if (prices != null && prices.Any())
             {
@@ -151,6 +150,7 @@ namespace ShoeStore.DataAccess.Repository
             Expression<Func<T, bool>> expr2)
         {
             var invokedExpr = Expression.Invoke(expr2, expr1.Parameters.Cast<Expression>());
+            Console.WriteLine(invokedExpr.ToString());
             return Expression.Lambda<Func<T, bool>>
                   (Expression.OrElse(expr1.Body, invokedExpr), expr1.Parameters);
         }
