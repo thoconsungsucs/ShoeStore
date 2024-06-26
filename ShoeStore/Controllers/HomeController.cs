@@ -17,7 +17,6 @@ namespace ShoeStore.Controllers
 
         public IActionResult Index()
         {
-            _unitOfWork.SpecificShoe.GetSpecificShoeWithImage();
             return View();
         }
 
