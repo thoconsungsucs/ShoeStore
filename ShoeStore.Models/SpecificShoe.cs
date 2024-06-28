@@ -12,6 +12,7 @@ namespace ShoeStore.Models
         [Required]
         public int ColorShoeId { get; set; }
         [ForeignKey("ColorShoeId")]
+        [ValidateNever]
         public ColorShoe ColorShoe { get; set; }
 
         [Required]

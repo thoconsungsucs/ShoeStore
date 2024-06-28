@@ -15,13 +15,15 @@
         </div>
         <div class="col-md-5 product-details mx-5">
             <form method="post">
+                <input asp-for="SpecificShoe.ColorShoeId" value="@Model.ColorShoe.ColorShoeId" hidden />
+                <input asp-for="SpecificShoe.Size" hidden />
                 <input asp-for="SpecificShoe.SpecificShoeId" hidden>
                 <h1>@Model.ColorShoe.Shoe.ShoeName</h1>
                 @* Gender *@
                 <div class="row">
                     <p class="h4 col-4 m-0">@(Model.SpecificShoeListForSize.First().Gender)'s Shoe</p>
                     <select asp-for="SpecificShoe.Gender" asp-items="@Model.GenderList" class="opt col-5" hidden>
-                        <option disabled selected>-- Select New Gender --</option>
+                        <option disabled selected>@(Model.SpecificShoeListForSize.First().Gender)</option>
                     </select>
                 </div>
 
@@ -34,7 +36,7 @@
                 @* Quantity *@
                 <div class="row mt-2">
                     <p class="quantity h3 text-body col-4 m-0"></p>
-                    <input asp-for="SpecificShoe.Quantity" class="opt col-5" placeholder="Enter Added Quantity" hidden>
+                    <input asp-for="SpecificShoe.Quantity" class="opt col-5" placeholder="Enter Quantity" hidden>
                 </div>
 
                 @* Discount *@
@@ -62,11 +64,13 @@
                 <p class="mb-1">Select Size</p>
                 @foreach (var specificShoe in Model.SpecificShoeListForSize)
                 {
-                    <button id="btn_@specificShoe.SpecificShoeId" class="sizeBtn btn btn-outline-secondary m-0 @(specificShoe.Quantity <= 0 ? "disable" : "")" onclick="changeSize(@specificShoe.SpecificShoeId, @specificShoe.Price, @specificShoe.Discount.DiscountValue, @specificShoe.Quantity)">@specificShoe.Size</button>
+                    <button id="btn_@specificShoe.SpecificShoeId" class="sizeBtn btn btn-outline-secondary m-0 @(specificShoe.Quantity <= 0 ? "disable" : "")" onclick="changeSize(@specificShoe.SpecificShoeId, @specificShoe.Price, @specificShoe.Discount.DiscountId, @specificShoe.Discount.DiscountValue, @specificShoe.Quantity)">@specificShoe.Size</button>
                 }
             </div>
             <button id="addToBagBtn" class="btn btn-dark btn-lg btn-block mt-4">Edit</button>
-            <button class="btn btn-danger btn-lg mt-4 mx-2">Delete</button>
+            <button id="deleteBtn" class="btn btn-danger btn-lg mt-4 mx-2">Delete</button>
+            <button class="btn btn-danger btn-lg mt-4">Delete All</button>
+
         </div>
     </div>
 </div>
@@ -86,14 +90,19 @@
             document.getElementById('mainImage').src = decodeURI(imageUrl);
         }
 
-        function changeSize(specificShoeId, price, discount, quantity) {
+        function changeSize(specificShoeId, price, discountId, discountValue, quantity) {
             selectedShoeId = specificShoeId;
+            //Display appropriate information for current size
             document.querySelector('.price').innerText = price + "$";
-            document.querySelector('.discount').innerText = discount * 100;
+            document.querySelector('.discount').innerText = discountValue * 100;
             document.querySelector('.quantity').innerText = quantity + " Shoes";
-            const inputElement = document.getElementById("SpecificShoe_SpecificShoeId");
-            inputElement.value = specificShoeId;
             setBorder(specificShoeId);
+
+            document.getElementById("SpecificShoe_SpecificShoeId").value = specificShoeId;
+            document.getElementById("SpecificShoe_Price").value = price;
+            document.getElementById("SpecificShoe_DiscountId").value = discountId;
+            document.getElementById("SpecificShoe_Quantity").value = quantity;
+            document.getElementById("SpecificShoe_Size").value = document.getElementById('btn_' + specificShoeId).innerText;
         }
 
         $('#addToBagBtn').click(function () {
@@ -101,6 +110,12 @@
                 document.getElementById("saveBtn").removeAttribute("hidden");
                 document.querySelectorAll(".opt").forEach(opt => opt.removeAttribute("hidden"));
             } else {
+                alert('Please select a shoe size first.');
+            }
+        });
+
+        $('#deleteBtn').click(function () {
+            if (selectedShoeId == null) {
                 alert('Please select a shoe size first.');
             }
         });

@@ -68,6 +68,7 @@ namespace ShoeStore.Controllers
                 TempData["Success"] = "Error while saving";
                 return RedirectToAction(nameof(Index));
             }
+            // Check exist color shoe
             var colorShoe = _unitOfWork.ColorShoe.Get(cs => cs.ColorId == specificShoeVM.SpecificShoe.ColorShoe.ColorId
                                                       && cs.ShoeId == specificShoeVM.Shoe.ShoeId);
             if (colorShoe == null)
@@ -80,54 +81,68 @@ namespace ShoeStore.Controllers
                 };
                 _unitOfWork.ColorShoe.Add(colorShoe);
                 _unitOfWork.Save();
-            }
 
-            string wwwRootPath = _webHostEnviroment.WebRootPath;
-            // Get color name to create folder
-            string color = _unitOfWork.Color.Get(s => s.ColorId == specificShoeVM.SpecificShoe.ColorShoe.ColorId).ColorName;
+                //
+                string wwwRootPath = _webHostEnviroment.WebRootPath;
+                // Get color name to create folder
+                string color = _unitOfWork.Color.Get(s => s.ColorId == specificShoeVM.SpecificShoe.ColorShoe.ColorId).ColorName;
 
-            string filePath = Path.Combine("images", "shoes", color + " " + specificShoeVM.Shoe.ShoeName.Replace(' ', '_'));
-            string directoryPath = Path.Combine(wwwRootPath, filePath);
-
-            if (!Directory.Exists(directoryPath))
-            {
-                Directory.CreateDirectory(directoryPath);
-            }
-
-            bool isMain = true; // First img is main img
-            foreach (var file in files)
-            {
-                string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
-                using (var fileStream = new FileStream(Path.Combine(directoryPath, fileName), FileMode.Create))
+                string filePath = Path.Combine("images", "shoes", color + " " + specificShoeVM.Shoe.ShoeName.Replace(' ', '_'));
+                string directoryPath = Path.Combine(wwwRootPath, filePath);
+                if (!Directory.Exists(directoryPath))
                 {
-                    file.CopyTo(fileStream);
+                    Directory.CreateDirectory(directoryPath);
                 }
 
-                ShoeImage imageShoe = new ShoeImage
+                bool isMain = true; // First img is main img
+                foreach (var file in files)
                 {
-                    ImageUrl = @"\" + filePath + @"\" + fileName,
-                    ColorShoeId = colorShoe.ColorShoeId,
-                    IsMain = isMain
-                };
-                _unitOfWork.ShoeImage.Add(imageShoe);
-                isMain = false;
+                    string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                    using (var fileStream = new FileStream(Path.Combine(directoryPath, fileName), FileMode.Create))
+                    {
+                        file.CopyTo(fileStream);
+                    }
+
+                    ShoeImage imageShoe = new ShoeImage
+                    {
+                        ImageUrl = @"\" + filePath + @"\" + fileName,
+                        ColorShoeId = colorShoe.ColorShoeId,
+                        IsMain = isMain
+                    };
+                    _unitOfWork.ShoeImage.Add(imageShoe);
+                    isMain = false;
+                }
             }
 
             foreach (var size in specificShoeVM.SizeSelected)
             {
-                SpecificShoe curShoe = new SpecificShoe
+                //Check exist specific shoe
+                var specificShoe = _unitOfWork.SpecificShoe.Get(
+                        s => s.ColorShoeId == colorShoe.ColorShoeId &&
+                        s.Size == size &&
+                        s.Gender == specificShoeVM.SpecificShoe.Gender
+                    );
+                if (specificShoe != null)
                 {
-                    ColorShoeId = colorShoe.ColorShoeId,
-                    Gender = specificShoeVM.SpecificShoe.Gender,
-                    Size = size,
-                    DiscountId = specificShoeVM.SpecificShoe.DiscountId,
-                    Price = specificShoeVM.SpecificShoe.Price,
-                    Quantity = specificShoeVM.SpecificShoe.Quantity
-                };
-                _unitOfWork.SpecificShoe.Add(curShoe);
+                    TempData["Success"] += $"Specific Shoe already exist \nColorShoeId: {colorShoe.ColorShoeId}, Gender: {specificShoeVM.SpecificShoe.Gender}, Size: {size} \n\n";
+                }
+                else
+                {
+                    //Add new specific shoe
+                    SpecificShoe curShoe = new SpecificShoe
+                    {
+                        ColorShoeId = colorShoe.ColorShoeId,
+                        Gender = specificShoeVM.SpecificShoe.Gender,
+                        Size = size,
+                        DiscountId = specificShoeVM.SpecificShoe.DiscountId,
+                        Price = specificShoeVM.SpecificShoe.Price,
+                        Quantity = specificShoeVM.SpecificShoe.Quantity
+                    };
+                    _unitOfWork.SpecificShoe.Add(curShoe);
+                    TempData["Success"] += $"Specific Shoe added successfully \nColorShoeId: {curShoe.ColorShoeId}, Gender: {curShoe.Gender}, Size: {curShoe.Size} \n\n";
+                }
             }
             _unitOfWork.Save();
-            TempData["Success"] = "Specific Shoe added successfully";
             return RedirectToAction(nameof(Index));
         }
 
@@ -148,12 +163,21 @@ namespace ShoeStore.Controllers
             };
 
             specificShoeDetailVM.ColorShoe.Images = _unitOfWork.ShoeImage.GetAll(si => si.ColorShoeId == colorShoeId && !si.IsMain).ToList();
+            if (specificShoeDetailVM.ColorShoe.Images.Count == 0)
+            {
+                specificShoeDetailVM.ColorShoe.Images.Add(new ShoeImage
+                {
+                    ImageUrl = "https://thumbs.dreamstime.com/b/light-abstract-empty-square-transparent-background-pattern-vector-231364928.jpg"
+                });
+            }
             return View(specificShoeDetailVM);
         }
 
         [HttpPost, ActionName("Details")]
         public IActionResult Edit(SpecificShoeDetailsVM specificShoeDetailsVM)
         {
+            _unitOfWork.SpecificShoe.Update(specificShoeDetailsVM.SpecificShoe);
+            _unitOfWork.Save();
             return View();
         }
 

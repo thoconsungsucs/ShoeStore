@@ -13,15 +13,15 @@ function LoadDataTable() {
                 data: 'id',
                 "render": function (data) {
                     return `<div class="btn-group" style="min-width: 150px;">
-                        <a href="/SpecificShoe/Insert/${data}" class="btn btn-secondary" >
+                        <a href="/SpecificShoe/Upsert/${data}" class="btn btn-secondary" >
                             <i class="bi bi-pencil"></i>
                             Add Specific Shoe
                         </a>
-                        <a href="/Shoe/Insert/${data}" class="btn btn-success" >
+                        <a href="/Shoe/Upsert/${data}" class="btn btn-success" >
                             <i class="bi bi-pencil"></i>
                             Edit
                         </a>
-                        <a onClick=Delete('/Shoe/Delete/${data}') class="btn btn-danger" >
+                        <a href="/Shoe/Delete/${data}" class="btn btn-danger" >
                             <i class="bi bi-trash"></i>
                                 Delete
                         </a>
