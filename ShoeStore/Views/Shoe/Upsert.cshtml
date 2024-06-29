@@ -1,4 +1,4 @@
-﻿    @model ShoeVM
+﻿        @model ShoeVM
 
 <div class="card mt-5 shadow border-0 rounded-3">
 
@@ -36,6 +36,22 @@
                 </select>
             </div>
 
+            @if (Model.ColorShoeList != null)
+            {
+                <div class="mb-3">
+                    <label class="form-label">Color List</label>
+                    <select id="colorOpt" asp-items="@Model.ColorShoeList" class="form-select" onchange="sendRequest()">
+                        <option disabled selected>-- Select Color --</option>
+                    </select>
+                </div>
+                @Html.Partial("_ColorShoeImagesPartials", new ColorShoe
+       {
+           Images = new List<ShoeImage>()
+       })
+                ;
+
+            }
+
 
             <div class="row mt-4">
                 <div class="col-6 col-md-4">
@@ -52,5 +68,45 @@
     </div>
 </div>
 @section Scripts {
+    <script>
+        async function sendRequest() {
+            var colorShoeId = $("#colorOpt").val();
+
+            let response = await $.ajax({
+                type: "GET",
+                url: "/ColorShoe/GetColorShoeImages",
+                data: { colorShoeId: colorShoeId }
+            });
+
+            $("#colorShoeImages").html(response);
+
+            document.querySelectorAll('.mainCheckbox').forEach(function (checkbox) {
+                checkbox.addEventListener('change', function () {
+                    var isChecked = this.checked;
+                    var shoeImageId = this.getAttribute('image-id');
+                    $.ajax({
+                        type: "POST",
+                        url: "/ShoeImage/SetMainImage",
+                        data: { isMain: isChecked, shoeImageId: shoeImageId }
+                    });
+                });
+            });
+        }
+
+        function deleteImage(shoeImageId, event) {
+            event.stopPropagation(); 
+            $.ajax({
+                type: "POST",
+                url: "/ShoeImage/Delete",
+                data: { shoeImageId: shoeImageId },
+
+            });
+            $("#img-" + shoeImageId).remove();
+        }
+
+
+
+    </script>
+
     <partial name="_ValidationScriptsPartial" />
 }

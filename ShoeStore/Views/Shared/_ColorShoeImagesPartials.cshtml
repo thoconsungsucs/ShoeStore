@@ -1,0 +1,23 @@
+﻿@model ColorShoe
+
+<div id="colorShoeImages" class="container">
+    <div class="row">
+        @foreach (var item in Model.Images)
+        {
+            <div id="img-@item.ShoeImageId" class="col-2 d-flex flex-column justify-content-between mb-4">
+                <img src="@item.ImageUrl" class="card-img" />
+                <div class="d-flex justify-content-between mt-2">
+                    <input type="checkbox" class="mainCheckbox" image-id="@item.ShoeImageId" @(item.IsMain ? "checked" : "") />
+                    <button type="button" onclick="deleteImage(@item.ShoeImageId, event)" class="btn btn-danger">Delete</button>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+
+
+
+
+

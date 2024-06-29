@@ -8,5 +8,6 @@ namespace ShoeStore.Models.ViewModel
         public Shoe Shoe { get; set; }
         [ValidateNever]
         public IEnumerable<SelectListItem> CategoryList { get; set; }
+        public IEnumerable<SelectListItem> ColorShoeList { get; set; }
     }
 }

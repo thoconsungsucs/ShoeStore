@@ -39,6 +39,11 @@ namespace ShoeStore.Controllers
             }
             //Edit
             shoeVM.Shoe = _unitOfWork.Shoe.Get(c => c.ShoeId == id);
+            shoeVM.ColorShoeList = _unitOfWork.ColorShoe.GetAll(c => c.ShoeId == id).Select(c => new SelectListItem
+            {
+                Text = c.Color.ColorName,
+                Value = c.ColorShoeId.ToString()
+            });
             if (shoeVM.Shoe == null)
             {
                 return NotFound();
