@@ -1,9 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using ShoeStore.Models;
 
 namespace ShoeStore.DataAccess.Data
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
@@ -13,14 +14,14 @@ namespace ShoeStore.DataAccess.Data
         public DbSet<Shoe> Shoes { get; set; }
         public DbSet<Color> Colors { get; set; }
         public DbSet<ShoeImage> ShoeImages { get; set; }
-        /*        DbSet<Size> Sizes { get; set; }
-                DbSet<Gender> Genders { get; set; }*/
         public DbSet<Discount> Discounts { get; set; }
         public DbSet<SpecificShoe> SpecificShoes { get; set; }
         public DbSet<ColorShoe> ColorShoes { get; set; }
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Category>().HasData(
                 new Category { CategoryId = 1, CategoryName = "LifeStyle", DisplayOrder = 1, Active = true },
                 new Category { CategoryId = 2, CategoryName = "Jordan", DisplayOrder = 2, Active = true },

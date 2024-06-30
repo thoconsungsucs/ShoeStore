@@ -4,7 +4,7 @@ $(document).ready(function () {
 });
 function LoadDataTable() {
     dataTable = $('#tbldata').DataTable({
-        "ajax": '/shoe/getall',
+        "ajax": '/Admin/Shoe/Getall',
         "columns": [
             { data: 'shoeName' },
             { data: 'price', "width": '25%' },
@@ -13,15 +13,15 @@ function LoadDataTable() {
                 data: 'id',
                 "render": function (data) {
                     return `<div class="btn-group" style="min-width: 150px;">
-                        <a href="/SpecificShoe/Upsert/${data}" class="btn btn-secondary" >
+                        <a href="/Admin/SpecificShoe/Insert/${data}" class="btn btn-secondary" >
                             <i class="bi bi-pencil"></i>
                             Add Specific Shoe
                         </a>
-                        <a href="/Shoe/Upsert/${data}" class="btn btn-success" >
+                        <a href="/Admin/Shoe/Upsert/${data}" class="btn btn-success" >
                             <i class="bi bi-pencil"></i>
                             Edit
                         </a>
-                        <a href="/Shoe/Delete/${data}" class="btn btn-danger" >
+                        <a href="/Admin/Shoe/Delete/${data}" class="btn btn-danger" >
                             <i class="bi bi-trash"></i>
                                 Delete
                         </a>

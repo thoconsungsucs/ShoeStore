@@ -28,8 +28,6 @@
         element.addEventListener('change', function () {
             var filterType = this.getAttribute('data-filter');
             var value = this.getAttribute('value');
-            console.log(filterType);
-            console.log(value);
             if (this.checked) {
                 if (!filters[filterType]) {
                     filters[filterType] = new Array();
@@ -65,5 +63,5 @@ function changeMainImage(element, newSrc, colorShoeId) {
     const link = mainImage.closest('a');
     const colorShoeIdPos = link.href.indexOf('=') + 1;
     link.href = link.href.slice(0, colorShoeIdPos) + colorShoeId + link.href.slice(colorShoeIdPos + 1);
-    mainImage.src = newSrc;
+    mainImage.src = decodeURI(newSrc);
 }
