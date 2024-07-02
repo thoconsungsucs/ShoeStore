@@ -15,6 +15,8 @@
         </div>
         <div class="col-md-5 product-details mx-5">
             <form method="post">
+                <input asp-for="ColorShoe.Shoe.ShoeId" hidden/>
+
                 <input asp-for="SpecificShoe.ColorShoeId" value="@Model.ColorShoe.ColorShoeId" hidden />
                 <input asp-for="SpecificShoe.Size" hidden />
                 <input asp-for="SpecificShoe.SpecificShoeId" hidden>

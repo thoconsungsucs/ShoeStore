@@ -88,7 +88,7 @@ namespace ShoeStore.Areas.Admin.Controllers
                 // Get color name to create folder
                 string color = _unitOfWork.Color.Get(s => s.ColorId == specificShoeVM.SpecificShoe.ColorShoe.ColorId).ColorName;
 
-                string filePath = Path.Combine("images", "shoes", color + " " + specificShoeVM.Shoe.ShoeName.Replace(' ', '_'));
+                string filePath = Path.Combine("images", "shoes", color + "_" + specificShoeVM.Shoe.ShoeName.Replace(' ', '_'));
                 string directoryPath = Path.Combine(wwwRootPath, filePath);
                 if (!Directory.Exists(directoryPath))
                 {
@@ -179,7 +179,13 @@ namespace ShoeStore.Areas.Admin.Controllers
         {
             _unitOfWork.SpecificShoe.Update(specificShoeDetailsVM.SpecificShoe);
             _unitOfWork.Save();
-            return View();
+            return RedirectToAction("Details", new 
+                { 
+                    specificShoeDetailsVM.SpecificShoe.ColorShoeId, 
+                    specificShoeDetailsVM.ColorShoe.Shoe.ShoeId,
+                    specificShoeDetailsVM.SpecificShoe.Gender
+                }
+            );
         }
 
         [HttpGet]

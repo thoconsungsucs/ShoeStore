@@ -41,7 +41,7 @@
 
             $.ajax({
                 type: "GET",
-                url: "/SpecificShoe/Filter",
+                url: "/Admin/SpecificShoe/Filter",
                 data: filters,
                 traditional: true,
                 success: function (response) {
