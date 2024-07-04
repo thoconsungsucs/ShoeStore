@@ -74,7 +74,7 @@
 
             let response = await $.ajax({
                 type: "GET",
-                url: "/ColorShoe/GetColorShoeImages",
+                url: "/Admin/ColorShoe/GetColorShoeImages",
                 data: { colorShoeId: colorShoeId }
             });
 
@@ -86,7 +86,7 @@
                     var shoeImageId = this.getAttribute('image-id');
                     $.ajax({
                         type: "POST",
-                        url: "/ShoeImage/SetMainImage",
+                        url: "/Admin/ShoeImage/SetMainImage",
                         data: { isMain: isChecked, shoeImageId: shoeImageId }
                     });
                 });
@@ -97,7 +97,7 @@
             event.stopPropagation(); 
             $.ajax({
                 type: "POST",
-                url: "/ShoeImage/Delete",
+                url: "/Admin/ShoeImage/Delete",
                 data: { shoeImageId: shoeImageId },
 
             });

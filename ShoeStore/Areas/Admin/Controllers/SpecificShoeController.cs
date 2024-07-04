@@ -96,6 +96,10 @@ namespace ShoeStore.Areas.Admin.Controllers
                 }
 
                 bool isMain = true; // First img is main img
+                if (_unitOfWork.ShoeImage.Get(si => si.ColorShoeId == colorShoe.ColorShoeId && si.IsMain) != null)
+                {
+                    isMain = false;
+                }
                 foreach (var file in files)
                 {
                     string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
@@ -179,13 +183,58 @@ namespace ShoeStore.Areas.Admin.Controllers
         {
             _unitOfWork.SpecificShoe.Update(specificShoeDetailsVM.SpecificShoe);
             _unitOfWork.Save();
-            return RedirectToAction("Details", new 
-                { 
-                    specificShoeDetailsVM.SpecificShoe.ColorShoeId, 
-                    specificShoeDetailsVM.ColorShoe.Shoe.ShoeId,
-                    specificShoeDetailsVM.SpecificShoe.Gender
-                }
+            return RedirectToAction("Details", new
+            {
+                specificShoeDetailsVM.SpecificShoe.ColorShoeId,
+                specificShoeDetailsVM.ColorShoe.Shoe.ShoeId,
+                specificShoeDetailsVM.SpecificShoe.Gender
+            }
             );
+        }
+
+        public IActionResult Delete(int specificShoeId)
+        {
+            var specificShoe = _unitOfWork.SpecificShoe.Get(s => s.SpecificShoeId == specificShoeId, includeProperties: "ColorShoe");
+            _unitOfWork.SpecificShoe.Remove(specificShoe);
+            _unitOfWork.Save();
+            return RedirectToAction("Details", new
+            {
+                specificShoe.ColorShoeId,
+                specificShoe.ColorShoe.ShoeId,
+                specificShoe.Gender
+            }
+            );
+        }
+
+        public IActionResult DeleteAll(int colorShoeId, Gender gender)
+        {
+            var specificShoeList = _unitOfWork.SpecificShoe.GetAll(ss => ss.ColorShoeId == colorShoeId && ss.Gender == gender);
+            foreach (var specificShoe in specificShoeList)
+            {
+                _unitOfWork.SpecificShoe.Remove(specificShoe);
+            }
+            _unitOfWork.Save();
+
+            if (_unitOfWork.SpecificShoe.GetAll(ss => ss.ColorShoeId == colorShoeId).Count() == 0)
+            {
+                var colorShoe = _unitOfWork.ColorShoe.Get(cs => cs.ColorShoeId == colorShoeId);
+                var shoeImages = _unitOfWork.ShoeImage.GetAll(si => si.ColorShoeId == colorShoeId);
+                _unitOfWork.ColorShoe.Remove(colorShoe);
+                foreach (var shoeImage in shoeImages)
+                {
+                    _unitOfWork.ShoeImage.Remove(shoeImage);
+                }
+                string wwwRootPath = _webHostEnviroment.WebRootPath;
+                string color = _unitOfWork.Color.Get(c => c.ColorId == colorShoe.ColorId).ColorName;
+                string filePath = Path.Combine("images", "shoes", color + "_" + colorShoe.Shoe.ShoeName.Replace(' ', '_'));
+                string directoryPath = Path.Combine(wwwRootPath, filePath);
+                if (Directory.Exists(directoryPath))
+                {
+                    Directory.Delete(directoryPath, true);
+                }
+                _unitOfWork.Save();
+            }
+            return RedirectToAction("Index");
         }
 
         [HttpGet]

@@ -129,6 +129,7 @@ namespace ShoeStore.DataAccess.Repository
             var sizeList = _db.SpecificShoes.Where(ss => ss.ColorShoeId == colorShoeId && ss.Gender == gender).Include("Discount").Select(ss => new SpecificShoe
             {
                 SpecificShoeId = ss.SpecificShoeId,
+                Gender = ss.Gender,
                 Size = ss.Size,
                 Quantity = ss.Quantity,
                 Price = ss.Price,

@@ -70,8 +70,8 @@
                 }
             </div>
             <button id="addToBagBtn" class="btn btn-dark btn-lg btn-block mt-4">Edit</button>
-            <button id="deleteBtn" class="btn btn-danger btn-lg mt-4 mx-2">Delete</button>
-            <button class="btn btn-danger btn-lg mt-4">Delete All</button>
+            <a id="deleteBtn" class="btn btn-danger btn-lg mt-4 mx-2" asp-action="Delete">Delete</a>
+            <a class="btn btn-danger btn-lg mt-4" asp-action="DeleteAll">Delete All</a>
 
         </div>
     </div>
@@ -105,6 +105,16 @@
             document.getElementById("SpecificShoe_DiscountId").value = discountId;
             document.getElementById("SpecificShoe_Quantity").value = quantity;
             document.getElementById("SpecificShoe_Size").value = document.getElementById('btn_' + specificShoeId).innerText;
+
+            var deleteHref = document.getElementById("deleteBtn").href;
+            let position = deleteHref.indexOf('?');
+            if (position == -1) {
+                document.getElementById("deleteBtn").href = deleteHref + `?specificShoeId=${specificShoeId}`;
+            } else {
+                var idIndex = deleteHref.indexOf("=") + 1;
+                var deleteLink = deleteHref.substring(0, idIndex) + specificShoeId;
+                document.getElementById("deleteBtn").href = deleteLink;
+            }
         }
 
         $('#addToBagBtn').click(function () {
@@ -119,6 +129,7 @@
         $('#deleteBtn').click(function () {
             if (selectedShoeId == null) {
                 alert('Please select a shoe size first.');
+                return false;
             }
         });
     </script>
