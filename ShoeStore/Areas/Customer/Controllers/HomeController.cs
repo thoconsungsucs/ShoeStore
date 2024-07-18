@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using ShoeStore.DataAccess.Repository.IRepository;
 using ShoeStore.Models;
+using ShoeStore.Models.ViewModel;
 using System.Diagnostics;
 
 namespace ShoeStore.Areas.Customer.Controllers
@@ -18,7 +20,21 @@ namespace ShoeStore.Areas.Customer.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            var specificShoeList = new SpecificShoeListVM
+            {
+                SpecificShoeList = _unitOfWork.SpecificShoe.GetSpecificShoeWithImage(),
+                ColorList = _unitOfWork.Color.GetAll().Select(c => new SelectListItem
+                {
+                    Text = c.ColorName,
+                    Value = c.ColorId.ToString()
+                }).ToList(),
+                CategoryList = _unitOfWork.Category.GetAll().Select(c => new SelectListItem
+                {
+                    Text = c.CategoryName,
+                    Value = c.CategoryId.ToString()
+                }).ToList()
+            };
+            return View(specificShoeList);
         }
 
         public IActionResult Privacy()

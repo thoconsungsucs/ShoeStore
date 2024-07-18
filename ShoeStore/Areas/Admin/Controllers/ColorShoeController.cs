@@ -5,8 +5,7 @@ using ShoeStore.Models.ViewModel;
 namespace ShoeStore.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = "Admin")]
-    [Authorize(Roles = "Employee")]
+    [Authorize(Roles = "Admin, Employee")]
 
     public class ColorShoeController : Controller
     {

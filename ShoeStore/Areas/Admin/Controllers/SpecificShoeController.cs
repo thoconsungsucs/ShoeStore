@@ -9,8 +9,7 @@ using ShoeStore.Ultility;
 namespace ShoeStore.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = "Admin")]
-    [Authorize(Roles = "Employee")]
+    [Authorize(Roles = "Admin, Employee")]
     public class SpecificShoeController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -239,6 +238,7 @@ namespace ShoeStore.Areas.Admin.Controllers
             return RedirectToAction("Index");
         }
 
+        [AllowAnonymous]  // Allow everyone to access this action
         [HttpGet]
         public IActionResult Filter(List<int>? categories = null, List<Gender>? genders = null, List<string>? prices = null, List<int>? sizes = null, List<int>? colors = null)
         {

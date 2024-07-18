@@ -2,7 +2,107 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+@using System.Web
+@model SpecificShoeListVM
+<partial name="_Notifications" />
+<div class="row gap-3 mt-5">
+    <div class="col-2 flex-shrink-0 p-3 bg-white pt-0" id="leftsidebar" style="width: 200px;">
+        <a href="/" class="d-flex mb-2 link-dark text-decoration-none">
+            <h2>Shoes</h2>
+        </a>
+
+
+        <ul class="list-unstyled ps-0">
+            <div class="category mb-4">
+                @foreach (var category in Model.CategoryList)
+                {
+                    <div class="h5 m-0">
+                        <input type="checkbox" class="filter-checkbox" data-filter="categories" value="@category.Value">
+                        <label class="form-label">@category.Text</label>
+                    </div>
+                }
+            </div>
+
+            <li class="border-top my-3"></li>
+            <li class="mb-1">
+                <button class="btn btn-toggle align-items-center rounded collapsed p-0" data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="true">
+                    <h5 class="text-start">Gender</h5>
+                </button>
+                <div class="collapse show" id="home-collapse">
+                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                        @foreach (var gender in SD.GenderList)
+                        {
+                            <div class="h6 m-0">
+                                <input type="checkbox" class="filter-checkbox" data-filter="genders" value="@gender.Value">
+                                <label class="form-label">@gender.Text</label>
+                            </div>
+                        }
+                    </ul>
+                </div>
+            </li>
+
+            <li class="border-top my-3"></li>
+            <li class="mb-1">
+                <button class="btn btn-toggle align-items-center rounded collapsed p-0" data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="true">
+                    <h5 class="text-start">Shop By Offer</h5>
+                </button>
+                <div class="collapse show" id="home-collapse">
+                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                        @foreach (var price in SD.PriceList)
+                        {
+                            <div class="h6 m-0">
+                                <input type="checkbox" class="filter-checkbox" data-filter="prices" value="@price.Value">
+                                <label class="form-label">@price.Text$</label>
+                            </div>
+                        }
+                    </ul>
+                </div>
+            </li>
+
+            <li class="border-top my-3"></li>
+            <li class="mb-1">
+                <button class="btn btn-toggle align-items-center rounded collapsed p-0" data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="true">
+                    <h5 class="text-start">Size</h5>
+                </button>
+                <div class="collapse show" id="home-collapse">
+                    <div class=" mb-3 flex flex-wrap" data-toggle="buttons" style="width:200px;">
+                        @foreach (var size in SD.SizeList)
+                        {
+                            <label class="btn btn-outline-dark" style="margin-right: 5px; width:50px; margin-bottom:5px">
+                                <input type="checkbox" class="filter-checkbox" name="SizeSelected" data-filter="sizes" value="@size.Value" style="display: none;"> @size.Text
+                            </label>
+                        }
+                    </div>
+                </div>
+            </li>
+
+            <li class="border-top my-3"></li>
+            <li class="mb-1">
+                <button class="btn btn-toggle align-items-center rounded collapsed p-0" data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="true">
+                    <h5 class="text-start">Color</h5>
+                </button>
+                <div class="collapse show" id="home-collapse">
+                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                        @foreach (var color in Model.ColorList)
+                        {
+                            <div class="h6 m-0">
+                                <input type="checkbox" class="filter-checkbox" data-filter="colors" value="@color.Value">
+                                <label class="form-label">@color.Text</label>
+                            </div>
+                        }
+                    </ul>
+                </div>
+            </li>
+
+        </ul>
+    </div>
+
+    @Html.Partial("_SpecificShoeListPartial", Model.SpecificShoeList)
 </div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/ssIndex.js">
+
+    </script>
+}
