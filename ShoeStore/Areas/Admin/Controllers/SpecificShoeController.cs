@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using ShoeStore.DataAccess.Repository.IRepository;
 using ShoeStore.Models;
@@ -8,6 +9,8 @@ using ShoeStore.Ultility;
 namespace ShoeStore.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Employee")]
     public class SpecificShoeController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -213,11 +216,10 @@ namespace ShoeStore.Areas.Admin.Controllers
             {
                 _unitOfWork.SpecificShoe.Remove(specificShoe);
             }
-            _unitOfWork.Save();
 
             if (_unitOfWork.SpecificShoe.GetAll(ss => ss.ColorShoeId == colorShoeId).Count() == 0)
             {
-                var colorShoe = _unitOfWork.ColorShoe.Get(cs => cs.ColorShoeId == colorShoeId);
+                var colorShoe = _unitOfWork.ColorShoe.Get(cs => cs.ColorShoeId == colorShoeId, "Shoe");
                 var shoeImages = _unitOfWork.ShoeImage.GetAll(si => si.ColorShoeId == colorShoeId);
                 _unitOfWork.ColorShoe.Remove(colorShoe);
                 foreach (var shoeImage in shoeImages)

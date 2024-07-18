@@ -71,7 +71,7 @@
             </div>
             <button id="addToBagBtn" class="btn btn-dark btn-lg btn-block mt-4">Edit</button>
             <a id="deleteBtn" class="btn btn-danger btn-lg mt-4 mx-2" asp-action="Delete">Delete</a>
-            <a class="btn btn-danger btn-lg mt-4" asp-action="DeleteAll">Delete All</a>
+            <a class="btn btn-danger btn-lg mt-4" asp-action="DeleteAll" asp-route-colorShoeId="@Model.ColorShoe.ColorShoeId">Delete All</a>
 
         </div>
     </div>

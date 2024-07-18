@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ShoeStore.DataAccess.Repository.IRepository;
 using ShoeStore.Models;
 
 namespace ShoeStore.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
+
     public class DiscountController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;

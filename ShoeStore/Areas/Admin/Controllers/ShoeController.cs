@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using ShoeStore.DataAccess.Repository.IRepository;
 using ShoeStore.Models;
@@ -6,6 +7,8 @@ using ShoeStore.Models.ViewModel;
 namespace ShoeStore.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Employee")]
     public class ShoeController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;

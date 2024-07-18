@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ShoeStore.DataAccess.Repository.IRepository;
 namespace ShoeStore.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Employee")]
     public class ShoeImageController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
