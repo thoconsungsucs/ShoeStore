@@ -6,7 +6,7 @@
         @foreach (var shoe in Model)
         {
             <div class="col-md-4 col-sm-3">
-                <a asp-controller="SpecificShoe" asp-action="Details" asp-route-colorShoeId="@shoe.ImageList.First().ColorShoeId" asp-route-shoeId="@shoe.ShoeId" asp-route-gender="@shoe.Gender" class="text-decoration-none">
+                <a asp-action="Details" asp-route-colorShoeId="@shoe.ImageList.First().ColorShoeId" asp-route-shoeId="@shoe.ShoeId" asp-route-gender="@shoe.Gender" class="text-decoration-none">
                     <div class="card mb-4 ">
                         <img id="mainImage" src="@shoe.ImageList.First().ImageUrl" class="card-img-top">
                         <div class="small-images">

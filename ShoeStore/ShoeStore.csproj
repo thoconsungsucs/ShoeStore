@@ -28,4 +28,11 @@
     <Folder Include="Areas\Admin\Views\ColorShoe\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="Areas\Customer\Views\Home\Details.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

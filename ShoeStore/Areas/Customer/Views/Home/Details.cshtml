@@ -1,0 +1,130 @@
+﻿@using System.Web
+@model SpecificShoeDetailsVM
+<div class="container mt-5">
+    <div class="row mt-5">
+        <div class="col-md-1">
+            <div class="product-images">
+                @foreach (var image in Model.ColorShoe.Images)
+                {
+                    <img src="@image.ImageUrl" class="small-img" onmouseover="changeMainImage('@HttpUtility.UrlEncode(image.ImageUrl)')">
+                }
+            </div>
+        </div>
+        <div class="col-md-5 border-0">
+            <img id="mainImage" src="@Model.ColorShoe.Images[0].ImageUrl" class="main-image">
+        </div>
+        <div class="col-md-5 product-details mx-5">
+            <input asp-for="SpecificShoe.SpecificShoeId" hidden>
+            <h1>@Model.ColorShoe.Shoe.ShoeName</h1>
+            @* Gender *@
+            <div class="row">
+                <p class="h4 col-4 m-0">@(Model.SpecificShoeListForSize.First().Gender)'s Shoe</p>
+                <select asp-items="@Model.GenderList" class="opt col-5" hidden>
+                    <option disabled selected>@(Model.SpecificShoeListForSize.First().Gender)</option>
+                </select>
+            </div>
+
+            @* Price *@
+            <div class="row mt-2">
+                <p class="price h3 text-body col-4 m-0">@Model.ColorShoe.Shoe.Price$</p>
+                <input class="opt col-5" placeholder="Enter New Specific Price" hidden>
+            </div>
+
+            @* Discount *@
+            <div class="row mt-2">
+                <div class="col-4">
+                    <span class="discount">0</span><span class="text-danger">% off</span>
+                </div>
+                <select asp-for="SpecificShoe.DiscountId" asp-items="@Model.DiscountList" class="opt col-5" hidden>
+                    <option disabled selected>-- Select New Discount --</option>
+                </select>
+            </div>
+
+            <div class="mt-3">
+                @foreach (var image in Model.ColorShoeIdWithImage)
+                {
+                    <a asp-action="Details" asp-route-colorShoeId="@image.ColorShoeId" asp-route-shoeId="@Model.ColorShoe.Shoe.ShoeId" asp-route-gender="@Model.SpecificShoeListForSize.First().Gender">
+                        <img src="@image.ImageUrl" class="small-img @(image.ColorShoeId == Model.ColorShoe.ColorShoeId ? "border border-2" : "border-0")">
+                    </a>
+                }
+            </div>
+
+            <div class="size-options flex mt-3">
+                <p class="mb-1">Select Size</p>
+                @foreach (var specificShoe in Model.SpecificShoeListForSize)
+                {
+                    <button id="btn_@specificShoe.SpecificShoeId" class="sizeBtn btn btn-outline-secondary m-0 @(specificShoe.Quantity <= 0 ? "disable" : "")" onclick="changeSize(@specificShoe.SpecificShoeId, @specificShoe.Price, @specificShoe.Discount.DiscountId, @specificShoe.Discount.DiscountValue, @specificShoe.Quantity)">@specificShoe.Size</button>
+                }
+            </div>
+            <button id="addToBagBtn" specificShoeId="0" class="btn btn-dark btn-lg mt-4" type="submit" onclick="addToBag()">Add to Bag</button>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function setBorder(specificShoeId) {
+            document.querySelectorAll('.sizeBtn').forEach(button => {
+                button.style.borderWidth = '';
+            });
+
+            document.getElementById('btn_' + specificShoeId).style.borderWidth = '2px';
+        }
+
+        let selectedShoeId = null;
+        function changeMainImage(imageUrl) {
+            document.getElementById('mainImage').src = decodeURI(imageUrl);
+        }
+
+        function changeSize(specificShoeId, price, discountId, discountValue, quantity) {
+            selectedShoeId = specificShoeId;
+            //Display appropriate information for current size
+            document.querySelector('.price').innerText = price + "$";
+            document.querySelector('.discount').innerText = discountValue * 100;
+            setBorder(specificShoeId);
+            document.getElementById("addToBagBtn").setAttribute('specificShoeId', specificShoeId);
+        }
+
+        document.querySelectorAll('.sizeBtn').forEach(function (button) {
+            button.addEventListener('click', function (event) {
+                // Handle the form data
+                event.preventDefault();
+            });
+        });
+
+        $('#addToBagBtn').click(function () {
+            if (selectedShoeId == null)
+                alert('Please select a shoe size first.');
+        });
+
+        function addToBag() {
+            if (selectedShoeId == 0)
+                return;
+
+            $.ajax({
+                type: 'POST',
+                url: '/Customer/Bag/AddToBag',
+                data: { specificShoeId: selectedShoeId },
+                success: function (response) {
+                    if (response.success) {
+                        alert('Shoe added to bag successfully.');
+                    } else {
+                        alert('Failed to add shoe to bag.');
+                    }
+                },
+                error: function (err) {
+                    if (err.status === 401) { // Unauthorized
+                        alert('You are not authorized to perform this action. Please log in.');
+                        window.location.href = '/Identity/Account/Login';
+                    } else {
+                        alert('An error occurred while processing your request. Please try again.');
+                        console.log(err);
+                    }
+                }
+            });
+        }
+
+        
+    </script>
+}

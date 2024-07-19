@@ -18,6 +18,7 @@ namespace ShoeStore.DataAccess.Data
         public DbSet<SpecificShoe> SpecificShoes { get; set; }
         public DbSet<ColorShoe> ColorShoes { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+        public DbSet<Bag> Bags { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using ShoeStore.DataAccess.Repository.IRepository;
 using ShoeStore.Models;
 using ShoeStore.Models.ViewModel;
+using ShoeStore.Ultility;
 using System.Diagnostics;
 
 namespace ShoeStore.Areas.Customer.Controllers
@@ -35,6 +36,37 @@ namespace ShoeStore.Areas.Customer.Controllers
                 }).ToList()
             };
             return View(specificShoeList);
+        }
+
+        public IActionResult Details(int colorShoeId, int shoeId, Gender gender)
+        {
+            var specificShoeDetailVM = new SpecificShoeDetailsVM
+            {
+                ColorShoeIdWithImage = _unitOfWork.ColorShoe.GetColorShoeIdWithImage(shoeId, gender),
+                SpecificShoeListForSize = _unitOfWork.SpecificShoe.GetSpecificShoeListForSize(colorShoeId, gender),
+                ColorShoe = _unitOfWork.ColorShoe.Get(cs => cs.ColorShoeId == colorShoeId, includeProperties: "Shoe"),
+                GenderList = SD.GenderList,
+                DiscountList = _unitOfWork.Discount.GetAll().Select(i => new SelectListItem
+                {
+                    Text = i.DiscountName,
+                    Value = i.DiscountId.ToString()
+                })
+            };
+
+            specificShoeDetailVM.ColorShoe.Images = _unitOfWork.ShoeImage.GetAll(si => si.ColorShoeId == colorShoeId && !si.IsMain).ToList();
+            if (specificShoeDetailVM.ColorShoe.Images.Count == 0)
+            {
+                specificShoeDetailVM.ColorShoe.Images.Add(new ShoeImage
+                {
+                    ImageUrl = "https://thumbs.dreamstime.com/b/light-abstract-empty-square-transparent-background-pattern-vector-231364928.jpg"
+                });
+            }
+            return View(specificShoeDetailVM);
+        }
+
+        public IActionResult Add(int specificShoeId)
+        {
+            return View();
         }
 
         public IActionResult Privacy()
