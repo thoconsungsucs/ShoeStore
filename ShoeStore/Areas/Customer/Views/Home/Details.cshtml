@@ -19,25 +19,23 @@
             @* Gender *@
             <div class="row">
                 <p class="h4 col-4 m-0">@(Model.SpecificShoeListForSize.First().Gender)'s Shoe</p>
-                <select asp-items="@Model.GenderList" class="opt col-5" hidden>
-                    <option disabled selected>@(Model.SpecificShoeListForSize.First().Gender)</option>
-                </select>
             </div>
 
             @* Price *@
             <div class="row mt-2">
-                <p class="price h3 text-body col-4 m-0">@Model.ColorShoe.Shoe.Price$</p>
-                <input class="opt col-5" placeholder="Enter New Specific Price" hidden>
+                <p class="price text-muted h3 text-body col-4 m-0 text-decoration-line-through ">@Model.ColorShoe.Shoe.Price$</p>
             </div>
+            
+            <div class="row mt-2">
+                <p class="discountPrice h3 text-body col-4 m-0"></p>
+            </div>
+
 
             @* Discount *@
             <div class="row mt-2">
                 <div class="col-4">
                     <span class="discount">0</span><span class="text-danger">% off</span>
                 </div>
-                <select asp-for="SpecificShoe.DiscountId" asp-items="@Model.DiscountList" class="opt col-5" hidden>
-                    <option disabled selected>-- Select New Discount --</option>
-                </select>
             </div>
 
             <div class="mt-3">
@@ -82,6 +80,7 @@
             //Display appropriate information for current size
             document.querySelector('.price').innerText = price + "$";
             document.querySelector('.discount').innerText = discountValue * 100;
+            document.querySelector('.discountPrice').innerText = `${(1 - discountValue) * price}$`;
             setBorder(specificShoeId);
             document.getElementById("addToBagBtn").setAttribute('specificShoeId', specificShoeId);
         }

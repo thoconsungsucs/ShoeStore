@@ -17,7 +17,29 @@ namespace ShoeStore.Areas.Customer.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            var bagList = _unitOfWork.Bag.GetAll(userId);
+            return View(bagList);
+        }
+
+        public IActionResult ChangeQuantity(int bagId, int quantity)
+        {
+            var bag = _unitOfWork.Bag.Get(b => b.BagId == bagId);
+            bag.Count = quantity;
+            _unitOfWork.Bag.Update(bag);
+            _unitOfWork.Save();
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        public IActionResult Remove(int bagId)
+        {
+            var bag = _unitOfWork.Bag.Get(b => b.BagId == bagId);
+            _unitOfWork.Bag.Remove(bag);
+            _unitOfWork.Save();
+            return RedirectToAction(nameof(Index));
         }
 
         #region API CALLS

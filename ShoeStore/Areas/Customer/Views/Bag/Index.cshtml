@@ -1,0 +1,63 @@
+﻿@model BagVM
+<form method="post">
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-lg-8">
+                <h4>Bag</h4>
+                @foreach (var bag in Model.Bags)
+                {
+                    <div class="d-flex p-0 py-4 product-details border-bottom">
+                        <img src="@bag.SpecificShoe.ImageShoes.First().ImageUrl" class="product-img">
+                        <div class="flex-grow-1 mx-3">
+                            <div class="d-lg-flex justify-content-between align-content-between">
+                                <h5 class="mb-1">@bag.SpecificShoe.ColorShoe.Shoe.ShoeName</h5>
+                                <span class="discounted-price">@((1 - bag.SpecificShoe.Discount.DiscountValue) * bag.SpecificShoe.Price)$</span>
+                            </div>
+                            <p class="p-0 mb-1">@(bag.SpecificShoe.Gender)'s Shoes</p>
+                            <p class="p-0 mb-1">Size: @bag.SpecificShoe.Size</p>
+                            <p>
+                                Quantity:
+                                <select id="@bag.BagId" class="border-0" value="@bag.Count" onchange="changeQuantity(@bag.BagId)">
+                                    @for (int i = 1; i <= 10; i++)
+                                    {
+                                        var isSelected = i == bag.Count ? "selected" : "";
+                                        <!option value="@i" @isSelected>@i</!option>
+                                    }
+
+                                </select>
+                                <button class="btn-remove" asp-action="Remove" asp-route-bagId="@bag.BagId">🗑️</button>
+                            </p>
+                        </div>
+                    </div>
+                }
+            </div>
+            @* Sumarry *@
+            <div class="col-lg-4">
+                <h4>Summary</h4>
+                <div class="summary">
+                    <p class="d-flex justify-content-between">
+                        <span>Subtotal</span>
+                        <span>@Model.OrderHeader.OrderTotal$</span>
+                    </p>
+                    <p class="d-flex justify-content-between">
+                        <span>Estimated Delivery & Handling</span>
+                        <span>Free</span>
+                    </p>
+                    <hr>
+                    <p class="d-flex justify-content-between font-weight-bold">
+                        <span>Total</span>
+                        <span>@Model.OrderHeader.OrderTotal$</span>
+                    </p>
+                    <button class="btn btn-dark btn-block mt-2">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script>
+    function changeQuantity(bagId) {
+        var quantity = document.getElementById(bagId).value;
+        window.location.href = "/Customer/Bag/ChangeQuantity?bagId=" + bagId + "&quantity=" + quantity;
+    }
+</script>

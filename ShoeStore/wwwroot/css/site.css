@@ -125,3 +125,40 @@ a {
 .product-details {
     padding-left: 2rem;
 }
+
+
+
+.cost {
+    text-decoration: line-through;
+    margin-right: 10px;
+}
+
+.discounted-price {
+    font-weight: bold;
+}
+
+.summary {
+    margin-top: 20px;
+}
+
+.btn-remove {
+    background: none;
+    border: none;
+    color: red;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 0;
+}
+
+.product-img {
+    width: 318px;
+    height: 318px;
+    object-fit: cover;
+}
+
+@media (max-width: 768px) {
+    .product-img {
+        width: 159px;
+        height: 159px;
+    }
+}
