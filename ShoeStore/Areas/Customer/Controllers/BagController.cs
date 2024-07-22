@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ShoeStore.DataAccess.Repository.IRepository;
 using ShoeStore.Models;
+using ShoeStore.Ultility;
 using System.Security.Claims;
 namespace ShoeStore.Areas.Customer.Controllers
 {
@@ -39,6 +40,7 @@ namespace ShoeStore.Areas.Customer.Controllers
             var bag = _unitOfWork.Bag.Get(b => b.BagId == bagId);
             _unitOfWork.Bag.Remove(bag);
             _unitOfWork.Save();
+            HttpContext.Session.SetInt32(SD.BagSession, _unitOfWork.Bag.GetAll(b => b.ApplicationUserId == bag.ApplicationUserId).Count());
             return RedirectToAction(nameof(Index));
         }
 
@@ -66,6 +68,7 @@ namespace ShoeStore.Areas.Customer.Controllers
                     Count = 1
                 };
                 _unitOfWork.Bag.Add(bag);
+                HttpContext.Session.SetInt32(SD.BagSession, _unitOfWork.Bag.GetAll(b => b.ApplicationUserId == userId).Count() + 1);
             }
             _unitOfWork.Save();
             return Json(new { success = true, message = "Shoe added to bag successfully" });

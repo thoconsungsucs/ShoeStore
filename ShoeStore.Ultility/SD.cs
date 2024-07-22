@@ -38,6 +38,7 @@ namespace ShoeStore.Ultility
         public static string Role_Admin = "Admin";
         public static string Role_Employee = "Employee";
 
+        public static string BagSession = "BagSession";
 
     }
 }
