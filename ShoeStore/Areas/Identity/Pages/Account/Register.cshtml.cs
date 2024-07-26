@@ -101,7 +101,8 @@ namespace ShoeStore.Areas.Identity.Pages.Account
 
             public string? Role { get; set; }
             public string Name { get; set; }
-            public string StreetAdress { get; set; }
+            public string PhoneNumber { get; set; }
+            public string StreetAddress { get; set; }
             public string City { get; set; }
             public string District { get; set; }
         }
@@ -136,7 +137,11 @@ namespace ShoeStore.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
-
+                user.Name = Input.Name;
+                user.StreetAddress = Input.StreetAddress;
+                user.City = Input.City;
+                user.District = Input.District;
+                user.PhoneNumber = Input.PhoneNumber;
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 var result = await _userManager.CreateAsync(user, Input.Password);

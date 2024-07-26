@@ -70,5 +70,10 @@ namespace ShoeStore.DataAccess.Repository
         {
             dbSet.Remove(entity);
         }
+
+        public void RemoveRange(IEnumerable<T> entities)
+        {
+            dbSet.RemoveRange(entities);
+        }
     }
 }

@@ -1,0 +1,77 @@
+﻿@model BagVM
+<form method="post">
+    <input type="hidden" asp-for="OrderHeader.OrderTotal" />
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-lg-8">
+                <h4>Checkout</h4>
+                <div class="form-floating mb-3">
+                    <input asp-for="OrderHeader.Name" class="form-control" autocomplete="username" aria-required="true" placeholder="Enter name" />
+                    <label asp-for="OrderHeader.Name">Name</label>
+                    <span asp-validation-for="OrderHeader.Name" class="text-danger"></span>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <input asp-for="OrderHeader.PhoneNumber" class="form-control" autocomplete="username" aria-required="true" placeholder="Enter phone number" />
+                    <label asp-for="OrderHeader.PhoneNumber">PhoneNumber</label>
+                    <span asp-validation-for="OrderHeader.PhoneNumber" class="text-danger"></span>
+                </div>
+                <div class="form-floating mb-3">
+                    <input asp-for="OrderHeader.StreetAddress" class="form-control" autocomplete="username" aria-required="true" placeholder="Enter street address" />
+                    <label asp-for="OrderHeader.StreetAddress">StreetAdress</label>
+                    <span asp-validation-for="OrderHeader.StreetAddress" class="text-danger"></span>
+                </div>
+                <div class="form-floating mb-3">
+                    <input asp-for="OrderHeader.City" class="form-control" autocomplete="username" aria-required="true" placeholder="Enter city" />
+                    <label asp-for="OrderHeader.City">City</label>
+                    <span asp-validation-for="OrderHeader.City" class="text-danger"></span>
+                </div>
+                <div class="form-floating mb-3">
+                    <input asp-for="OrderHeader.District" class="form-control" autocomplete="username" aria-required="true" placeholder="Enter district" />
+                    <label asp-for="OrderHeader.District">District</label>
+                    <span asp-validation-for="OrderHeader.District" class="text-danger"></span>
+                </div>
+            </div>
+            @* Sumarry *@
+            <div class="col-lg-4">
+                <h4>Summary</h4>
+                <div class="summary">
+                    <p class="d-flex justify-content-between">
+                        <span>Subtotal</span>
+                        <span>@Model.OrderHeader.OrderTotal$</span>
+                    </p>
+                    <p class="d-flex justify-content-between">
+                        <span>Estimated Delivery & Handling</span>
+                        <span>Free</span>
+                    </p>
+                    <hr>
+                    <p class="d-flex justify-content-between font-weight-bold">
+                        <span>Total</span>
+                        <span>@Model.OrderHeader.OrderTotal$</span>
+                    </p>
+                    <button class="btn btn-dark btn-block mt-2" asp-action="PlaceOrder">Place order</button>
+                </div>
+
+                @foreach (var bag in Model.Bags)
+                {
+                    <div class="d-flex p-0 py-4 product-details border-bottom">
+                        <img src="@bag.SpecificShoe.ImageShoes.First().ImageUrl" class="product-img">
+                        <div class="flex-grow-1 mx-3">
+                            <div class="justify-content-between align-content-between">
+                                <h5 class="mb-1">@bag.SpecificShoe.ColorShoe.Shoe.ShoeName</h5>
+                                <span class="discounted-price">@((1 - bag.SpecificShoe.Discount.DiscountValue) * bag.SpecificShoe.Price * bag.Count)$</span>
+                            </div>
+                            <p class="p-0 mb-1">@(bag.SpecificShoe.Gender)'s Shoes</p>
+                            <p class="p-0 mb-1">Size: @bag.SpecificShoe.Size</p>
+                            <p class="p-0 mb-1">
+                                Qty: @bag.Count
+                            </p>
+                        </div>
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>
+</form>
+

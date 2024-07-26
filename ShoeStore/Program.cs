@@ -5,6 +5,7 @@ using ShoeStore.DataAccess.Data;
 using ShoeStore.DataAccess.Repository;
 using ShoeStore.DataAccess.Repository.IRepository;
 using ShoeStore.Ultility;
+using ShoeStore.Ultility.VnPay;
 using System.Text.Json.Serialization;
 
 
@@ -22,6 +23,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IEmailSender, EmailSender>();
+builder.Services.AddSingleton<IVnPayService, VnPayService>();
 builder.Services.AddRazorPages();
 builder.Services.ConfigureApplicationCookie(options =>
 {

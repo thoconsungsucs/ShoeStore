@@ -108,6 +108,7 @@
                 success: function (response) {
                     if (response.success) {
                         alert('Shoe added to bag successfully.');
+                        location.reload();
                     } else {
                         alert('Failed to add shoe to bag.');
                     }

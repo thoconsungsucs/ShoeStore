@@ -47,7 +47,8 @@ namespace ShoeStore.DataAccess.Repository
                         Size = b.SpecificShoe.Size,
                         ImageShoes = _db.ShoeImages.Where(i => i.IsMain && i.ColorShoeId == b.SpecificShoe.ColorShoeId).ToList()
                     },
-                    Count = b.Count
+                    Count = b.Count,
+                    SpecificShoeId = b.SpecificShoeId
                 }).ToList(),
                 OrderHeader = new OrderHeader
                 {

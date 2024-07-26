@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ShoeStore.DataAccess.Data;
 
@@ -11,9 +12,11 @@ using ShoeStore.DataAccess.Data;
 namespace ShoeStore.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240724134344_AddProperties")]
+    partial class AddProperties
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -408,32 +411,6 @@ namespace ShoeStore.DataAccess.Migrations
                     b.ToTable("Discounts");
                 });
 
-            modelBuilder.Entity("ShoeStore.Models.OrderDetail", b =>
-                {
-                    b.Property<int>("OrderDetailId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderDetailId"));
-
-                    b.Property<int>("OrderHeaderId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SpecificShoeId")
-                        .HasColumnType("int");
-
-                    b.HasKey("OrderDetailId");
-
-                    b.HasIndex("OrderHeaderId");
-
-                    b.HasIndex("SpecificShoeId");
-
-                    b.ToTable("OrderDetails");
-                });
-
             modelBuilder.Entity("ShoeStore.Models.OrderHeader", b =>
                 {
                     b.Property<int>("OrderHeaderId")
@@ -755,25 +732,6 @@ namespace ShoeStore.DataAccess.Migrations
                     b.Navigation("Color");
 
                     b.Navigation("Shoe");
-                });
-
-            modelBuilder.Entity("ShoeStore.Models.OrderDetail", b =>
-                {
-                    b.HasOne("ShoeStore.Models.OrderHeader", "OrderHeader")
-                        .WithMany()
-                        .HasForeignKey("OrderHeaderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ShoeStore.Models.SpecificShoe", "SpecificShoe")
-                        .WithMany()
-                        .HasForeignKey("SpecificShoeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("OrderHeader");
-
-                    b.Navigation("SpecificShoe");
                 });
 
             modelBuilder.Entity("ShoeStore.Models.OrderHeader", b =>

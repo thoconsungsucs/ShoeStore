@@ -10,7 +10,9 @@
         IDiscountRepository Discount { get; }
         ISpecificShoeRepository SpecificShoe { get; }
         IColorShoeRepository ColorShoe { get; }
-
+        IApplicationUserRepository ApplicationUser { get; }
+        IOrderHeaderRepository OrderHeader { get; }
+        IOrderDetailRepository OrderDetail { get; }
         void Save();
     }
 }

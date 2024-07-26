@@ -40,5 +40,17 @@ namespace ShoeStore.Ultility
 
         public static string BagSession = "BagSession";
 
+        public const string PaymentStatusPending = "Pending";
+        public const string PaymentStatusApproved = "Approved";
+        public const string PaymentStatusRejected = "Rejected";
+
+        public const string OrderStatusPending = "Pending";
+        public const string OrderStatusInProcess = "Processing";
+        public const string OrderStatusShipped = "Shipped";
+        public const string OrderStatusCancelled = "Cancelled";
+
+        public const string PaymentMethodCOD = "COD";
+        public const string PaymentMethodVnPay = "VnPay";
+
     }
 }
