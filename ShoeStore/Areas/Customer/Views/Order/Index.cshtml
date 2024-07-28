@@ -1,0 +1,74 @@
+﻿
+<partial name="_Notifications" />
+<div class="container">
+    <div class="row py-4">
+        <div class="col-6">
+            <h2 class="text-primary">Shoe List</h2>
+        </div>
+
+    </div>
+    <table id="tbldata" class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>
+                    Order Header ID
+                </th>
+                <th>
+                    Order Date
+                </th>
+                <th>
+                    Order Status
+                </th>
+                <th>
+                    Payment Status
+                </th>
+                <th>
+                    Payment Date
+                </th>
+                <th>
+                    Payment Method
+                </th>
+                <th>
+                    Order Total
+                </th>
+            </tr>
+        </thead>
+
+    </table>
+</div>
+
+@section Scripts {
+    <script>
+
+        $(document).ready(function () {
+            $('#tbldata').DataTable({
+                "ajax": {
+                    "url": "/Customer/Order/GetAll",
+                    "type": "GET",
+                    "datatype": "json"
+                },
+                "columns": [
+                    { "data": "orderHeaderId", "width": "10%" },
+                    { "data": "orderDate", "width": "10%" },
+                    { "data": "orderStatus", "width": "10%" },
+                    { "data": "paymentStatus", "width": "10%" },
+                    { "data": "paymentDate", "width": "10%" },
+                    { "data": "paymentMethod", "width": "10%" },
+                    { "data": "orderTotal", "width": "10%" },
+                    {
+                        data: 'orderHeaderId',
+                        "render": function (data) {
+                            return `<div class="btn-group" style="min-width: 150px;">
+                                        <a href="/Customer/Order/Details?orderHeaderId=${data}" class="btn btn-primary" >
+                                                Details
+                                        </a>
+                                    </div>`
+                        },
+                        "width": '10%'
+                    }
+                ],
+                "width": "100%"
+            });
+        });
+    </script>
+}

@@ -43,6 +43,7 @@ namespace ShoeStore.Ultility
         public const string PaymentStatusPending = "Pending";
         public const string PaymentStatusApproved = "Approved";
         public const string PaymentStatusRejected = "Rejected";
+        public const string PaymentStatusRefund = "Refund";
 
         public const string OrderStatusPending = "Pending";
         public const string OrderStatusInProcess = "Processing";

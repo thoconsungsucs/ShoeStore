@@ -54,20 +54,23 @@
 
                 @foreach (var bag in Model.Bags)
                 {
-                    <div class="d-flex p-0 py-4 product-details border-bottom">
-                        <img src="@bag.SpecificShoe.ImageShoes.First().ImageUrl" class="product-img">
-                        <div class="flex-grow-1 mx-3">
-                            <div class="justify-content-between align-content-between">
-                                <h5 class="mb-1">@bag.SpecificShoe.ColorShoe.Shoe.ShoeName</h5>
-                                <span class="discounted-price">@((1 - bag.SpecificShoe.Discount.DiscountValue) * bag.SpecificShoe.Price * bag.Count)$</span>
+                    if (bag.Value)
+                    {
+                        <div class="d-flex p-0 py-4 product-details border-bottom">
+                            <img src="@bag.Key.SpecificShoe.ImageShoes.First().ImageUrl" class="product-img">
+                            <div class="flex-grow-1 mx-3">
+                                <div class="justify-content-between align-content-between">
+                                    <h5 class="mb-1">@bag.Key.SpecificShoe.ColorShoe.Shoe.ShoeName</h5>
+                                    <span class="discounted-price">@((1 - bag.Key.SpecificShoe.Discount.DiscountValue) * bag.Key.SpecificShoe.Price * bag.Key.Count)$</span>
+                                </div>
+                                <p class="p-0 mb-1">@(bag.Key.SpecificShoe.Gender)'s Shoes</p>
+                                <p class="p-0 mb-1">Size: @bag.Key.SpecificShoe.Size</p>
+                                <p class="p-0 mb-1">
+                                    Qty: @bag.Key.Count
+                                </p>
                             </div>
-                            <p class="p-0 mb-1">@(bag.SpecificShoe.Gender)'s Shoes</p>
-                            <p class="p-0 mb-1">Size: @bag.SpecificShoe.Size</p>
-                            <p class="p-0 mb-1">
-                                Qty: @bag.Count
-                            </p>
                         </div>
-                    </div>
+                    }
                 }
 
             </div>

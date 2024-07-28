@@ -8,25 +8,29 @@
                 @foreach (var bag in Model.Bags)
                 {
                     <div class="d-flex p-0 py-4 product-details border-bottom">
-                        <img src="@bag.SpecificShoe.ImageShoes.First().ImageUrl" class="product-img">
+                        <img src="@bag.Key.SpecificShoe.ImageShoes.First().ImageUrl" class="product-img">
                         <div class="flex-grow-1 mx-3">
                             <div class="d-lg-flex justify-content-between align-content-between">
-                                <h5 class="mb-1">@bag.SpecificShoe.ColorShoe.Shoe.ShoeName</h5>
-                                <span class="discounted-price">@((1 - bag.SpecificShoe.Discount.DiscountValue) * bag.SpecificShoe.Price * bag.Count)$</span>
+                                @if(!bag.Value)
+                                {
+                                    <h5 class="mb-1 text-danger">Out of stocks</h5>
+                                }
+                                <h5 class="mb-1">@bag.Key.SpecificShoe.ColorShoe.Shoe.ShoeName</h5>
+                                <span class="discounted-price">@((1 - bag.Key.SpecificShoe.Discount.DiscountValue) * bag.Key.SpecificShoe.Price * bag.Key.Count)$</span>
                             </div>
-                            <p class="p-0 mb-1">@(bag.SpecificShoe.Gender)'s Shoes</p>
-                            <p class="p-0 mb-1">Size: @bag.SpecificShoe.Size</p>
+                            <p class="p-0 mb-1">@(bag.Key.SpecificShoe.Gender)'s Shoes</p>
+                            <p class="p-0 mb-1">Size: @bag.Key.SpecificShoe.Size</p>
                             <p>
                                 Quantity:
-                                <select id="@bag.BagId" class="border-0" value="@bag.Count" onchange="changeQuantity(@bag.BagId)">
+                                <select id="@bag.Key.BagId" class="border-0" value="@bag.Key.Count" onchange="changeQuantity(@bag.Key.BagId)">
                                     @for (int i = 1; i <= 10; i++)
                                     {
-                                        var isSelected = i == bag.Count ? "selected" : "";
+                                        var isSelected = i == bag.Key.Count ? "selected" : "";
                                         <!option value="@i" @isSelected>@i</!option>
                                     }
 
                                 </select>
-                                <button class="btn-remove" asp-action="Remove" asp-route-bagId="@bag.BagId">🗑️</button>
+                                <button class="btn-remove" asp-action="Remove" asp-route-bagId="@bag.Key.BagId">🗑️</button>
                             </p>
                         </div>
                     </div>

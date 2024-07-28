@@ -19,42 +19,52 @@ namespace ShoeStore.DataAccess.Repository
 
         public BagVM GetAll(string userId)
         {
-
+            var dateNow = DateOnly.FromDateTime(DateTime.Now);
             var bags = new BagVM
             {
-                Bags = _db.Bags.Where(b => b.ApplicationUserId == userId).Select(b => new Bag
-                {
-                    BagId = b.BagId,
-                    SpecificShoe = new SpecificShoe
+                Bags = _db.Bags
+                .Where(b => b.ApplicationUserId == userId)
+                .Select(b => new KeyValuePair<Bag, bool>(
+                    new Bag
                     {
-                        ColorShoe = new ColorShoe
+                        BagId = b.BagId,
+                        SpecificShoe = new SpecificShoe
                         {
-                            Color = new Color
+                            ColorShoe = new ColorShoe
                             {
-                                ColorName = b.SpecificShoe.ColorShoe.Color.ColorName
+                                Color = new Color
+                                {
+                                    ColorName = b.SpecificShoe.ColorShoe.Color.ColorName
+                                },
+                                Shoe = new Shoe
+                                {
+                                    ShoeName = b.SpecificShoe.ColorShoe.Shoe.ShoeName
+                                },
                             },
-                            Shoe = new Shoe
+                            Gender = b.SpecificShoe.Gender,
+                            Price = b.SpecificShoe.Price,
+                            Discount = new Discount
                             {
-                                ShoeName = b.SpecificShoe.ColorShoe.Shoe.ShoeName
+                                DiscountValue = b.SpecificShoe.Discount.StartDate <= dateNow && b.SpecificShoe.Discount.EndDate >= dateNow && b.SpecificShoe.Discount.Active ?
+                                    b.SpecificShoe.Discount.DiscountValue : 0
                             },
+                            Size = b.SpecificShoe.Size,
+                            ImageShoes = _db.ShoeImages.Where(i => i.IsMain && i.ColorShoeId == b.SpecificShoe.ColorShoeId).ToList()
                         },
-                        Gender = b.SpecificShoe.Gender,
-                        Price = b.SpecificShoe.Price,
-                        Discount = new Discount
-                        {
-                            DiscountValue = b.SpecificShoe.Discount.DiscountValue
-                        },
-                        Size = b.SpecificShoe.Size,
-                        ImageShoes = _db.ShoeImages.Where(i => i.IsMain && i.ColorShoeId == b.SpecificShoe.ColorShoeId).ToList()
+                        Count = b.Count,
+                        SpecificShoeId = b.SpecificShoeId
                     },
-                    Count = b.Count,
-                    SpecificShoeId = b.SpecificShoeId
-                }).ToList(),
+                    b.Count < b.SpecificShoe.Quantity
+                )).ToList(),
                 OrderHeader = new OrderHeader
                 {
-                    OrderTotal = _db.Bags.Where(b => b.ApplicationUserId == userId).Sum(b => (1 - b.SpecificShoe.Discount.DiscountValue) * b.SpecificShoe.Price * b.Count)
+                    OrderTotal = _db.Bags
+                            .Where(b => b.ApplicationUserId == userId)
+                            .Sum(b => b.Count < b.SpecificShoe.Quantity ?
+                                (1 - (b.SpecificShoe.Discount.StartDate <= dateNow && b.SpecificShoe.Discount.EndDate >= dateNow && b.SpecificShoe.Discount.Active ? b.SpecificShoe.Discount.DiscountValue : 0)) * b.SpecificShoe.Price * b.Count : 0)
                 }
             };
+
             return bags;
         }
     }

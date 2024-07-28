@@ -33,6 +33,12 @@ namespace ShoeStore.Areas.Customer.Controllers
         public IActionResult ChangeQuantity(int bagId, int quantity)
         {
             var bag = _unitOfWork.Bag.Get(b => b.BagId == bagId);
+            var specificShoeQuantity = _unitOfWork.SpecificShoe.Get(ss => ss.SpecificShoeId == bag.SpecificShoeId).Quantity;
+            if (quantity < 1 || quantity > specificShoeQuantity)
+            {
+                TempData["Error"] = "Quantity must be between 1 and " + specificShoeQuantity;
+                return RedirectToAction(nameof(Index));
+            }
             bag.Count = quantity;
             _unitOfWork.Bag.Update(bag);
             _unitOfWork.Save();
@@ -92,7 +98,7 @@ namespace ShoeStore.Areas.Customer.Controllers
             sb.Append("Pay for shoes:");
             bagVM.Bags.ForEach(b =>
             {
-                sb.Append($" {b.SpecificShoe.ColorShoe.Shoe.ShoeName}-{b.SpecificShoe.Size}-{b.Count}, ");
+                sb.Append($" {b.Key.SpecificShoe.ColorShoe.Shoe.ShoeName}-{b.Key.SpecificShoe.Size}-{b.Key.Count}, ");
             });
             var vnPayModel = new VnPaymentRequestModel
             {
@@ -110,35 +116,39 @@ namespace ShoeStore.Areas.Customer.Controllers
             var response = _vnPayservice.PaymentExecute(collections);
             var order = _unitOfWork.OrderHeader.Get(o => o.OrderHeaderId == orderHeaderId);
             order.TransactionId = response.TransactionId;
-            order.PaymentDate = DateTime.Now;
-            if (response.Success)
+            order.PaymentDate = response.PaymentDate;
+            if (response.VnPayResponseCode == "00")
             {
                 var claimsIdentity = (ClaimsIdentity)User.Identity;
                 var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
 
                 order.PaymentStatus = SD.PaymentStatusApproved;
                 _unitOfWork.OrderHeader.Update(order);
-                _unitOfWork.Save();
                 var bagVM = _unitOfWork.Bag.GetAll(userId);
                 foreach (var bag in bagVM.Bags)
                 {
-                    OrderDetail orderDetail = new OrderDetail
+                    if (bag.Value)
                     {
-                        SpecificShoeId = bag.SpecificShoeId,
-                        OrderHeaderId = orderHeaderId,
-                        Quantity = bag.Count
-                    };
-                    _unitOfWork.OrderDetail.Add(orderDetail);
-
-                    var specificShoe = _unitOfWork.SpecificShoe.Get(ss => ss.SpecificShoeId == bag.SpecificShoeId);
-                    specificShoe.Quantity -= bag.Count;
-                    _unitOfWork.SpecificShoe.Update(specificShoe);
-                    _unitOfWork.Save();
+                        OrderDetail orderDetail = new OrderDetail
+                        {
+                            SpecificShoeId = bag.Key.SpecificShoeId,
+                            OrderHeaderId = orderHeaderId,
+                            Quantity = bag.Key.Count,
+                            Price = (1 - bag.Key.SpecificShoe.Discount.DiscountValue) * bag.Key.SpecificShoe.Price
+                        };
+                        _unitOfWork.OrderDetail.Add(orderDetail);
+                        var specificShoe = _unitOfWork.SpecificShoe.Get(ss => ss.SpecificShoeId == bag.Key.SpecificShoeId);
+                        specificShoe.Quantity -= bag.Key.Count;
+                        _unitOfWork.SpecificShoe.Update(specificShoe);
+                    }
                 }
                 bagVM.Bags.ForEach(b =>
                 {
-                    /*b.SpecificShoe = null;*/
-                    _unitOfWork.Bag.Remove(b);
+                    if (b.Value)
+                    {
+                        b.Key.SpecificShoe = null;
+                        _unitOfWork.Bag.Remove(b.Key);
+                    }
                 });
                 _unitOfWork.Save();
                 HttpContext.Session.SetInt32(SD.BagSession, 0);

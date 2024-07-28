@@ -17,6 +17,7 @@ namespace ShoeStore.Models
         [ForeignKey("SpecificShoeId")]
         [ValidateNever]
         public SpecificShoe SpecificShoe { get; set; }
+        public double Price { get; set; }
         public int Quantity { get; set; }
 
     }

@@ -9,7 +9,7 @@ namespace ShoeStore.Models
         public int SpecificShoeId { get; set; }
         [ForeignKey("SpecificShoeId")]
         [ValidateNever]
-        public SpecificShoe SpecificShoe { get; set; }
+        public SpecificShoe? SpecificShoe { get; set; }
         public int Count { get; set; }
 
         public string ApplicationUserId { get; set; }

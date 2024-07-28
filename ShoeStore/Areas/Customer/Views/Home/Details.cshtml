@@ -51,7 +51,7 @@
                 <p class="mb-1">Select Size</p>
                 @foreach (var specificShoe in Model.SpecificShoeListForSize)
                 {
-                    <button id="btn_@specificShoe.SpecificShoeId" class="sizeBtn btn btn-outline-secondary m-0 @(specificShoe.Quantity <= 0 ? "disable" : "")" onclick="changeSize(@specificShoe.SpecificShoeId, @specificShoe.Price, @specificShoe.Discount.DiscountId, @specificShoe.Discount.DiscountValue, @specificShoe.Quantity)">@specificShoe.Size</button>
+                    <button id="btn_@specificShoe.SpecificShoeId" class="sizeBtn btn btn-outline-secondary m-0 @(specificShoe.Quantity <= 0 ? "disable" : "")" onclick="changeSize(@specificShoe.SpecificShoeId, @specificShoe.Price, @(specificShoe.Discount?.DiscountValue ?? 0), @specificShoe.Quantity)">@specificShoe.Size</button>
                 }
             </div>
             <button id="addToBagBtn" specificShoeId="0" class="btn btn-dark btn-lg mt-4" type="submit" onclick="addToBag()">Add to Bag</button>
@@ -75,7 +75,7 @@
             document.getElementById('mainImage').src = decodeURI(imageUrl);
         }
 
-        function changeSize(specificShoeId, price, discountId, discountValue, quantity) {
+        function changeSize(specificShoeId, price, discountValue, quantity) {
             selectedShoeId = specificShoeId;
             //Display appropriate information for current size
             document.querySelector('.price').innerText = price + "$";

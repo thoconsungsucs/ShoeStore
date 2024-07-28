@@ -7,6 +7,7 @@
         public string OrderDescription { get; set; }
         public string OrderId { get; set; }
         public string PaymentId { get; set; }
+        public DateTime PaymentDate { get; set; }
         public int TransactionId { get; set; }
         public string Token { get; set; }
         public string VnPayResponseCode { get; set; }
@@ -19,5 +20,7 @@
         public string Description { get; set; }
         public double Amount { get; set; }
         public DateTime CreatedDate { get; set; }
+        public DateTime TransactionDate { get; set; }
+        public string Name { get; set; }
     }
 }

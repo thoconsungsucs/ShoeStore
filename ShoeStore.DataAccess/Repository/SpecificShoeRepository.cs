@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using ShoeStore.DataAccess.Data;
+﻿using ShoeStore.DataAccess.Data;
 using ShoeStore.DataAccess.Repository.IRepository;
 using ShoeStore.Models;
 using ShoeStore.Models.ViewModel;
@@ -19,40 +18,6 @@ namespace ShoeStore.DataAccess.Repository
             _db.Update(specificShoe);
         }
 
-        /*public IEnumerable<SpecificShoeListVM> GetAllGroupByShoeAndGender()
-        {
-            // Get all specific shoes with number of color, max discount and image url each color
-            // Get all shoe images
-            var imgList = _db.ShoeImages;
-            var specificShoeList = GetAll(includeProperties: "Shoe,Discount")
-                        .GroupBy(s => new { s.Shoe.ShoeName, s.Gender, s.ShoeId })
-                        .Select(group => new
-                        {
-                            ShoeName = group.Key.ShoeName,
-                            Gender = group.Key.Gender,
-                            TotalColor = group.Select(s => s.ColorId).Distinct().Count(),
-                            DiscountMax = group.Select(s => s.Discount.DiscountValue).Max(),
-                            ShoeId = group.Key.ShoeId,
-                            ColorIds = group.Select(s => s.ColorId).Distinct()
-                        }).ToList();
-
-            // Get image url for each color
-            var specificShoeListWithImg = specificShoeList
-                        .Select(item => new SpecificShoeListVM
-                        {
-                            ShoeName = item.ShoeName,
-                            Gender = item.Gender,
-                            TotalColors = item.TotalColor,
-                            DiscountMax = item.DiscountMax,
-                            ShoeId = item.ShoeId,
-                            ImageList = item.ColorIds.ToDictionary(
-                                colorId => colorId,
-                                colorId => imgList.FirstOrDefault(i => i.IsMain && i.ShoeId == item.ShoeId && colorId == i.ColorId)?.ImageUrl
-                            )
-                        }).ToList();
-            return specificShoeListWithImg;
-        }*/
-
         public List<SpecificShoeWithImage> GetSpecificShoeWithImage(List<int>? categories = null, List<Gender>? genders = null, List<string>? prices = null, List<int>? sizes = null, List<int>? colors = null)
         {
 
@@ -69,12 +34,34 @@ namespace ShoeStore.DataAccess.Repository
                 shoeColorShoeList = shoeColorShoeList.Where(s => categories.Contains(s.CategoryId));
             }
 
+            var dateNow = DateOnly.FromDateTime(DateTime.Now);
+            var discountList = _db.Discounts.Where(d => d.StartDate <= dateNow && d.EndDate >= dateNow && d.Active);
 
 
             var specificShoeList = _db.SpecificShoes
-                .Include("Discount")
+                .GroupJoin(
+                    discountList,
+                    ss => ss.DiscountId,
+                    d => d.DiscountId,
+                    (ss, d) => new { ss, d }
+                )
+                .SelectMany(
+                    temp => temp.d.DefaultIfEmpty(),
+                    (temp, d) => new SpecificShoe
+                    {
+                        SpecificShoeId = temp.ss.SpecificShoeId,
+                        ColorShoeId = temp.ss.ColorShoeId,
+                        Gender = temp.ss.Gender,
+                        Size = temp.ss.Size,
+                        Quantity = temp.ss.Quantity,
+                        Price = temp.ss.Price,
+                        Discount = d,
+                        DiscountId = temp.ss.DiscountId,
+                    }
+                )
                 .Where(ss => genders == null || genders.Contains(ss.Gender))
                 .Where(ss => sizes == null || sizes.Contains(ss.Size));
+
 
             if (prices != null && prices.Any())
             {
@@ -113,7 +100,7 @@ namespace ShoeStore.DataAccess.Repository
                    Gender = group.Key.Gender,
                    Price = group.First().ShoeColorShoe.Price,
                    TotalColors = group.GroupBy(specificShoeShoeColorShoe => specificShoeShoeColorShoe.SpecificShoe.ColorShoeId).Count(),
-                   DiscountMax = group.Max(specificShoeShoeColorShoe => specificShoeShoeColorShoe.SpecificShoe.Discount.DiscountValue),
+                   DiscountMax = group.Max(specificShoeShoeColorShoe => specificShoeShoeColorShoe.SpecificShoe.Discount != null ? specificShoeShoeColorShoe.SpecificShoe.Discount.DiscountValue : 0),
                    ImageList = group.GroupBy(specificShoeShoeColorShoe => specificShoeShoeColorShoe.SpecificShoe.ColorShoeId).Select(x => new ColorShoeImage
                    {
                        ColorShoeId = x.Key,
@@ -126,15 +113,37 @@ namespace ShoeStore.DataAccess.Repository
 
         public List<SpecificShoe> GetSpecificShoeListForSize(int colorShoeId, Gender gender)
         {
-            var sizeList = _db.SpecificShoes.Where(ss => ss.ColorShoeId == colorShoeId && ss.Gender == gender).Include("Discount").Select(ss => new SpecificShoe
-            {
-                SpecificShoeId = ss.SpecificShoeId,
-                Gender = ss.Gender,
-                Size = ss.Size,
-                Quantity = ss.Quantity,
-                Price = ss.Price,
-                Discount = ss.Discount
-            }
+            var dateNow = DateOnly.FromDateTime(DateTime.Now);
+            var discountList = _db.Discounts.Where(d => d.StartDate <= dateNow && d.EndDate >= dateNow && d.Active);
+
+            var sizeList = _db.SpecificShoes.GroupJoin(
+                    discountList,
+                    ss => ss.DiscountId,
+                    d => d.DiscountId,
+                    (ss, d) => new { ss, d }
+                )
+                .SelectMany(
+                    temp => temp.d.DefaultIfEmpty(),
+                    (temp, d) => new SpecificShoe
+                    {
+                        SpecificShoeId = temp.ss.SpecificShoeId,
+                        ColorShoeId = temp.ss.ColorShoeId,
+                        Gender = temp.ss.Gender,
+                        Size = temp.ss.Size,
+                        Quantity = temp.ss.Quantity,
+                        Price = temp.ss.Price,
+                        Discount = d,
+                        DiscountId = temp.ss.DiscountId,
+                    }
+                ).Where(ss => ss.ColorShoeId == colorShoeId && ss.Gender == gender).Select(ss => new SpecificShoe
+                {
+                    SpecificShoeId = ss.SpecificShoeId,
+                    Gender = ss.Gender,
+                    Size = ss.Size,
+                    Quantity = ss.Quantity,
+                    Price = ss.Price,
+                    Discount = ss.Discount
+                }
             ).ToList();
             return sizeList;
         }
