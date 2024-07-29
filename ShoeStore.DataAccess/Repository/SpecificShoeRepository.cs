@@ -1,4 +1,5 @@
-﻿using ShoeStore.DataAccess.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using ShoeStore.DataAccess.Data;
 using ShoeStore.DataAccess.Repository.IRepository;
 using ShoeStore.Models;
 using ShoeStore.Models.ViewModel;
@@ -114,35 +115,22 @@ namespace ShoeStore.DataAccess.Repository
         public List<SpecificShoe> GetSpecificShoeListForSize(int colorShoeId, Gender gender)
         {
             var dateNow = DateOnly.FromDateTime(DateTime.Now);
-            var discountList = _db.Discounts.Where(d => d.StartDate <= dateNow && d.EndDate >= dateNow && d.Active);
 
-            var sizeList = _db.SpecificShoes.GroupJoin(
-                    discountList,
-                    ss => ss.DiscountId,
-                    d => d.DiscountId,
-                    (ss, d) => new { ss, d }
-                )
-                .SelectMany(
-                    temp => temp.d.DefaultIfEmpty(),
-                    (temp, d) => new SpecificShoe
-                    {
-                        SpecificShoeId = temp.ss.SpecificShoeId,
-                        ColorShoeId = temp.ss.ColorShoeId,
-                        Gender = temp.ss.Gender,
-                        Size = temp.ss.Size,
-                        Quantity = temp.ss.Quantity,
-                        Price = temp.ss.Price,
-                        Discount = d,
-                        DiscountId = temp.ss.DiscountId,
-                    }
-                ).Where(ss => ss.ColorShoeId == colorShoeId && ss.Gender == gender).Select(ss => new SpecificShoe
+            var sizeList = _db.SpecificShoes.Include("Discount")
+
+                .Where(ss => ss.ColorShoeId == colorShoeId && ss.Gender == gender).Select(ss => new SpecificShoe
                 {
                     SpecificShoeId = ss.SpecificShoeId,
                     Gender = ss.Gender,
                     Size = ss.Size,
                     Quantity = ss.Quantity,
                     Price = ss.Price,
-                    Discount = ss.Discount
+                    Discount = new Discount
+                    {
+                        DiscountId = ss.Discount.DiscountId,
+                        DiscountValue = ss.Discount.StartDate <= dateNow && ss.Discount.EndDate >= dateNow && ss.Discount.Active ?
+                            ss.Discount.DiscountValue : 0
+                    }
                 }
             ).ToList();
             return sizeList;

@@ -99,6 +99,14 @@ namespace ShoeStore.Areas.Admin.Controllers
                 orderFromDb.OrderStatus = SD.OrderStatusCancelled;
                 orderFromDb.PaymentStatus = SD.PaymentStatusRefund;
                 _unitOfWork.OrderHeader.Update(orderFromDb);
+
+                var orderDetails = _unitOfWork.OrderDetail.GetAll(od => od.OrderHeaderId == orderHeaderId);
+                foreach (var orderDetail in orderDetails)
+                {
+                    var specificShoe = _unitOfWork.SpecificShoe.Get(o => o.SpecificShoeId == orderDetail.SpecificShoeId);
+                    specificShoe.Quantity += orderDetail.Quantity;
+                    _unitOfWork.SpecificShoe.Update(specificShoe);
+                }
                 _unitOfWork.Save();
                 TempData["Success"] = "Refund successful";
             }
