@@ -1,4 +1,4 @@
-# ShoeStore Application
+# ASP.NET MVC Shoe E-Commerce Web Application
 
 ## Overview
 
