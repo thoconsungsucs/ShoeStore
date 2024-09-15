@@ -4,7 +4,7 @@
     <input type="hidden" asp-for="OrderHeader.OrderHeaderId" />
     <div class="container mt-5">
         <div class="row">
-            <div class="col-lg-8">
+            <div class="col-lg-7">
                 <h4>Order Detail</h4>
                 <div class="form-floating mb-3">
                     <input asp-for="OrderHeader.ApplicationUserId" class="form-control" autocomplete="username" aria-required="true" disabled />
@@ -64,7 +64,7 @@
                 </div>
             </div>
             @* Sumarry *@
-            <div class="col-lg-4">
+            <div class="col-lg-5">
                 <h4>Summary</h4>
                 <div class="summary">
                     <p class="d-flex justify-content-between font-weight-bold">
@@ -72,7 +72,7 @@
                         <span>@Model.OrderHeader.OrderTotal$</span>
                     </p>
                     
-                    @if (Model.OrderHeader.OrderStatus == SD.OrderStatusPending)
+                    @if (Model.OrderHeader.OrderStatus == SD.OrderStatusPending && Model.OrderHeader.PaymentStatus == SD.PaymentStatusApproved)
                     {
                         <button class="btn btn-danger btn-block mt-2" asp-action="Cancel" asp-route-orderHeaderId="@Model.OrderHeader.OrderHeaderId">Cancel</button>
                     }
@@ -89,7 +89,7 @@
                         <div class="flex-grow-1 mx-3">
                             <div class="justify-content-between align-content-between">
                                 <h5 class="mb-1">@orderDetails.SpecificShoe.ColorShoe.Shoe.ShoeName</h5>
-                                <span class="discounted-price">@orderDetails.SpecificShoe.Price * orderDetails.Count$</span>
+                                <span class="discounted-price">@(orderDetails.SpecificShoe.Price * orderDetails.Quantity)</span>
                             </div>
                             <p class="p-0 mb-1">@(orderDetails.SpecificShoe.Gender)'s Shoes</p>
                             <p class="p-0 mb-1">Size: @orderDetails.SpecificShoe.Size</p>

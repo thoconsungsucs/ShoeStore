@@ -61,7 +61,8 @@ function changeMainImage(element, newSrc, colorShoeId) {
     const cardDiv = element.closest('.card.mb-4');
     const mainImage = cardDiv.querySelector('.card-img-top');
     const link = mainImage.closest('a');
-    const colorShoeIdPos = link.href.indexOf('=') + 1;
-    link.href = link.href.slice(0, colorShoeIdPos) + colorShoeId + link.href.slice(colorShoeIdPos + 1);
+    const startColorShoeIdPos = link.href.indexOf('=') + 1;
+    const endColorShoeIdPos = link.href.indexOf('&')
+    link.href = link.href.slice(0, startColorShoeIdPos) + colorShoeId + link.href.slice(endColorShoeIdPos);
     mainImage.src = decodeURI(newSrc);
 }

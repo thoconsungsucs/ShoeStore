@@ -29,7 +29,7 @@ namespace ShoeStore.DataAccess.Repository
                       cs => cs.ShoeId,
                       (s, cs) => new { s.ShoeId, s.ShoeName, s.CategoryId, s.Price, cs.ColorShoeId }
                  );
-            // Where category 
+            // Filter category
             if (categories != null)
             {
                 shoeColorShoeList = shoeColorShoeList.Where(s => categories.Contains(s.CategoryId));
@@ -38,8 +38,10 @@ namespace ShoeStore.DataAccess.Repository
             var dateNow = DateOnly.FromDateTime(DateTime.Now);
             var discountList = _db.Discounts.Where(d => d.StartDate <= dateNow && d.EndDate >= dateNow && d.Active);
 
-
             var specificShoeList = _db.SpecificShoes
+                .Where(ss => genders == null || genders.Contains(ss.Gender)) // Filter by gender
+                .Where(ss => sizes == null || sizes.Contains(ss.Size)) // Filter by size
+                                                                       //Left join
                 .GroupJoin(
                     discountList,
                     ss => ss.DiscountId,
@@ -59,11 +61,9 @@ namespace ShoeStore.DataAccess.Repository
                         Discount = d,
                         DiscountId = temp.ss.DiscountId,
                     }
-                )
-                .Where(ss => genders == null || genders.Contains(ss.Gender))
-                .Where(ss => sizes == null || sizes.Contains(ss.Size));
+                );
 
-
+            //Filter by range of prices
             if (prices != null && prices.Any())
             {
                 var predicate = PredicateBuilder.False<SpecificShoe>();

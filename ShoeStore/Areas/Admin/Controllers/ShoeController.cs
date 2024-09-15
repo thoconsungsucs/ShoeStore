@@ -27,7 +27,6 @@ namespace ShoeStore.Areas.Admin.Controllers
         {
             ShoeVM shoeVM = new ShoeVM()
             {
-                Shoe = new Shoe(),
                 CategoryList = _unitOfWork.Category.GetAll().Select(i => new SelectListItem
                 {
                     Text = i.CategoryName,

@@ -59,6 +59,7 @@ namespace ShoeStore.Areas.Customer.Controllers
 
         public async Task<IActionResult> Cancel(int orderHeaderId)
         {
+            // Need to add authorization here
             var orderFromDb = _unitOfWork.OrderHeader.Get(o => o.OrderHeaderId == orderHeaderId);
             var requestModel = new VnPaymentRequestModel
             {

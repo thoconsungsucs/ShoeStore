@@ -63,6 +63,7 @@ namespace ShoeStore.Areas.Customer.Controllers
             var bagVM = _unitOfWork.Bag.GetAll(userId);
             var applicationUser = _unitOfWork.ApplicationUser.Get(u => u.Id == userId);
 
+            // Add current user information to order header
             bagVM.OrderHeader.Name = applicationUser.Name;
             bagVM.OrderHeader.PhoneNumber = applicationUser.PhoneNumber;
             bagVM.OrderHeader.StreetAddress = applicationUser.StreetAddress;
@@ -94,6 +95,7 @@ namespace ShoeStore.Areas.Customer.Controllers
             _unitOfWork.OrderHeader.Add(bagVM.OrderHeader);
             _unitOfWork.Save();
 
+            // Order header description
             StringBuilder sb = new StringBuilder();
             sb.Append("Pay for shoes:");
             bagVM.Bags.ForEach(b =>
@@ -107,9 +109,11 @@ namespace ShoeStore.Areas.Customer.Controllers
                 Description = sb.ToString(),
                 OrderId = bagVM.OrderHeader.OrderHeaderId
             };
+            // Redirect to payment page
             return Redirect(_vnPayservice.CreatePaymentUrl(HttpContext, vnPayModel));
         }
 
+        // After user paid
         public IActionResult PaymentCallBack(int orderHeaderId)
         {
             var collections = HttpContext.Request.Query;
@@ -117,6 +121,7 @@ namespace ShoeStore.Areas.Customer.Controllers
             var order = _unitOfWork.OrderHeader.Get(o => o.OrderHeaderId == orderHeaderId);
             order.TransactionId = response.TransactionId;
             order.PaymentDate = response.PaymentDate;
+            // Success
             if (response.VnPayResponseCode == "00")
             {
                 var claimsIdentity = (ClaimsIdentity)User.Identity;
@@ -156,6 +161,7 @@ namespace ShoeStore.Areas.Customer.Controllers
             }
             else
             {
+                // Error
                 order.PaymentStatus = SD.PaymentStatusRejected;
                 _unitOfWork.OrderHeader.Update(order);
                 _unitOfWork.Save();
@@ -173,11 +179,13 @@ namespace ShoeStore.Areas.Customer.Controllers
             var specificShoe = _unitOfWork.SpecificShoe.Get(ss => ss.SpecificShoeId == specificShoeId);
 
             var bag = _unitOfWork.Bag.Get(b => b.ApplicationUserId == userId && b.SpecificShoeId == specificShoeId);
+            // Add 1 unit to shoe already in bag
             if (bag != null)
             {
                 bag.Count += 1;
                 _unitOfWork.Bag.Update(bag);
             }
+            // If shoe is not in bag
             else
             {
                 bag = new Bag
